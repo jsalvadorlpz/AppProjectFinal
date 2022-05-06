@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.entrega4.Adapter.RecyclerAdapter;
 import com.example.entrega4.DetalleMovieActivity;
-import com.example.entrega4.MovieDetailsResults;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
 import com.example.entrega4.TheMovieDatasetApi;
@@ -55,7 +54,7 @@ public class MainFragment extends Fragment {
     public static String CATEGORY="popular";
     public int id;
     public String titulo,release,poster_path,sinopsis,language,original_title,nombregeneros,gen,company;
-    public List<String> titulos, releases,generos3,sinopsisList,languages, poster_paths,original_titles,generos_final,companys;
+    public List<String> titulos, releases,generos3,sinopsisList,languages, poster_paths,original_titles,generos_final,companys,StringMovieIds;
     public List<Integer> generos,generosid,MovieIds;
     public List<List<Integer>> generos2;
     public double popularity;
@@ -76,20 +75,15 @@ public class MainFragment extends Fragment {
         itemList = new ArrayList<>();
 
         titulos = new ArrayList<String>();
-        original_titles = new ArrayList<String>();
         releases = new ArrayList<String>();
         generos = new ArrayList<Integer>();
         generos2 = new ArrayList<List<Integer>>();
         generos3 = new ArrayList<String>();
-        sinopsisList = new ArrayList<>();
-        languages = new ArrayList<>();
         poster_paths = new ArrayList<String>();
         popolularitys = new ArrayList<Double>();
-        generos4 = new ArrayList<Object>();
-        generosid = new ArrayList<Integer>();
-        generos_final = new ArrayList<String>();
         MovieIds = new ArrayList<Integer>();
-        companys = new ArrayList<String>();
+        StringMovieIds = new ArrayList<String>();
+
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -101,90 +95,40 @@ public class MainFragment extends Fragment {
         call.enqueue(new Callback<MovieResults>() {
             @Override
             public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
-                Log.e("","entra en el onResponse");
                 MovieResults results = response.body();
                 List<MovieResults.ResultsBean> listOfMovies = results.getResults();
-                //initValues();
+
                 int cantidad = listOfMovies.size();
                 cantidad2 = cantidad;
 
                 while (i < cantidad) {
                     MovieResults.ResultsBean Movie = listOfMovies.get(i);
-                    titulo = (String) Movie.getOriginal_title();
+                    titulo = (String) Movie.getTitle();
                     release = (String) Movie.getRelease_date();
-
-                    sinopsis = (String) Movie.getOverview();
-                    language= (String)Movie.getOriginal_language();
+                    generos = (List<Integer>) Movie.getGenre_ids();
                     poster_path= (String) Movie.getPoster_path();
                     popularity = (Double) Movie.getPopularity();
                     id = (Integer)Movie.getId();
-                    //Log.e("",String.valueOf(Movie.getId()));
 
-                    original_title = (String) Movie.getOriginal_title();
-                    //Log.e("",Movie.getOriginal_title());
                     titulos.add(titulo);
                     releases.add(release);
-
-                    sinopsisList.add(sinopsis);
-                    languages.add(language);
+                    generos2.add(generos);
                     poster_paths.add(poster_path);
                     popolularitys.add(popularity);
-                    original_titles.add(original_title);
                     MovieIds.add(id);
+                    StringMovieIds.add(String.valueOf(id));
 
-                    Call<MovieDetailsResults> call3 = myInterface.listOfMovieDetails(id, API_KEY);
-                    call3.enqueue(new Callback<MovieDetailsResults>() {
-                        @Override
-                        public void onResponse(Call<MovieDetailsResults> call, Response<MovieDetailsResults> response) {
-                            int iteradorListaCompanys = 0;
-                            int iteradorListaGeneros = 0;
-                            String GenreName = "";
-                            String CompnayName = "";
-                            MovieDetailsResults results = response.body();
-                            List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
-                            int SizeGenreList = listOfGenre.size();
-                            List<MovieDetailsResults.ProductionCompany> listOfCompanys = results.getProductionCompanies();
-                            int SizeCompanysList = listOfCompanys.size();
-                            if(SizeGenreList==1){
-                                GenreName = listOfGenre.get(iteradorListaGeneros).getName();
-                            } else {
-                                while (iteradorListaGeneros < SizeGenreList) {
-                                    GenreName += listOfGenre.get(iteradorListaGeneros).getName()+ " ";
-                                    iteradorListaGeneros++;
-                                }
-                            }
-                            if(SizeCompanysList==1) {
-                                CompnayName = listOfCompanys.get(iteradorListaCompanys).getName();
-                            }else{
-                                while (iteradorListaCompanys < SizeCompanysList) {
-                                    CompnayName += listOfCompanys.get(iteradorListaCompanys).getName() + " ";
-                                    iteradorListaCompanys++;
-                                }
-                            }
-                            Log.e("",GenreName);
-                            Log.e("",CompnayName);
-                            companys.add(CompnayName);
-                            generos3.add(GenreName);
-                        }
-                        @Override
-                        public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
 
-                        }
-
-                    });
-                    //iteradorMovie++;
-                    i = i + 1;
+                    i++;
                 }
-                //initValues();
-                while(MovieIds.size()!=cantidad2) {
-                    if (MovieIds.size() == cantidad2) {
-                        initValues();
-                        Log.e("" , "El tamaño del MovieIDs es: "+ String.valueOf(MovieIds.size()));
-                    }
+                i = 0;
+                while (i < cantidad2) {
+                    generos3.add(String.valueOf(generos2.get(i)));
+                    i++;
                 }
+                initValues();
 
             }
-
 
 
 
@@ -194,14 +138,6 @@ public class MainFragment extends Fragment {
             }
 
         });
-        while(MovieIds.size()!=cantidad2) {
-            if (MovieIds.size() == cantidad2) {
-                initValues();
-                Log.e("" , "El tamaño del MovieIDs es: "+ String.valueOf(MovieIds.size()));
-            }
-        }
-        Log.e("" , "El tamaño del MovieIDs es: "+ String.valueOf(MovieIds.size()));
-        //initValues();
 
         return view;
     }
@@ -211,23 +147,9 @@ public class MainFragment extends Fragment {
 
     private void initValues(){
         itemList = getItems();
-        //RecyclerAdapter adaptador = new RecyclerAdapter(getContext(),itemList);
-        //LinearLayoutManager  linearLayoutManager = new LinearLayoutManager(getContext(), VERTICAL,false);
-        //recyclerView.setLayoutManager(linearLayoutManager);
-        //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        //recyclerView.setAdapter(adaptador);
-        //adaptador.notifyDataSetChanged();
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //RecyclerView.LayoutManager recyce = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
-        //recyclerView.setLayoutManager(recyce);
-       // RecyclerAdapter rAdapter = new RecyclerAdapter(getContext(),itemList);
-        //recyclerView.setAdapter(rAdapter);
-
         recyclerAdapter = new RecyclerAdapter(getContext(),itemList);
-        //itemList = getItems();
         recyclerView.setAdapter(recyclerAdapter);
 
 
@@ -241,10 +163,10 @@ public class MainFragment extends Fragment {
                 detalle.putExtra("titulo",titulo2);
                 detalle.putExtra("genre",itemList.get(recyclerView.getChildAdapterPosition(view)).getGenrer());
                 detalle.putExtra("date",itemList.get(recyclerView.getChildAdapterPosition(view)).getRelease());
-                detalle.putExtra("sinopsis",itemList.get(recyclerView.getChildAdapterPosition(view)).getSinopsis());
-                detalle.putExtra("language",itemList.get(recyclerView.getChildAdapterPosition(view)).getLanguage());
+                // detalle.putExtra("sinopsis",itemList.get(recyclerView.getChildAdapterPosition(view)).getSinopsis());
+                //detalle.putExtra("language",itemList.get(recyclerView.getChildAdapterPosition(view)).getLanguage());
                 detalle.putExtra("image",itemList.get(recyclerView.getChildAdapterPosition(view)).getPosterPath());
-               detalle.putExtra("company",itemList.get(recyclerView.getChildAdapterPosition(view)).getCompany());
+                detalle.putExtra("id",itemList.get(recyclerView.getChildAdapterPosition(view)).getId());
                 startActivity(detalle);
 
             }
@@ -254,12 +176,13 @@ public class MainFragment extends Fragment {
     }
     private List<ItemList> getItems(){
         List<ItemList> itemLists = new ArrayList<>();
-        while(j<cantidad2) {
+        int iterador = 0;
+        while(iterador<cantidad2) {
 
-            itemLists.add(new ItemList(titulos.get(j), releases.get(j),
-                    generos3.get(j),sinopsisList.get(j),languages.get(j),poster_paths.get(j),
-                    popolularitys.get(j),titulos.get(j),companys.get(i)));
-            j+=1;
+            itemLists.add(new ItemList(titulos.get(iterador), releases.get(iterador),
+                    poster_paths.get(iterador), generos3.get(iterador),
+                    popolularitys.get(iterador),StringMovieIds.get(iterador)));
+            iterador++;
         }
 
 

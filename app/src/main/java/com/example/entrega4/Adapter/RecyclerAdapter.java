@@ -67,14 +67,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         // para completar el diseño del contenedor de vistas.
 
         String Titulo = items.get(position).getTitulo();
-        String original_title = items.get(position).getOriginal_title();
+        //String original_title = items.get(position).getOriginal_title();
         String Release = items.get(position).getRelease();
         String Genrer = items.get(position).getGenrer();
         Double pop = items.get(position).getPopularity();
         //Glide.with(getContext()).load(poster_paths.get(j)).into();
         View view = inflater.inflate(R.layout.item_list_view,null,false);
         Glide.with(view).load(url_imagenes+items.get(position).getPosterPath()).into(holder.image);
-        holder.Titulo.setText(Titulo+ " ("+ original_title + ")");
+        holder.Titulo.setText(Titulo);
         holder.Release.setText(Release);
         holder.Genrer.setText(Genrer);
         holder.popu.setProgress((int) Math.round((pop/100)));

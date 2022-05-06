@@ -3,21 +3,22 @@ package com.example.entrega4.model;
 import java.io.Serializable;
 
 public class ItemList implements Serializable {
-    private String titulo, release,genrer,poster_path,sinopsis,language,original_title,company;
+    private String titulo, release,genrer,poster_path,sinopsis,language,original_title;
     private double popularity;
+    private  String id;
     //private int imgResource;
 
-    public ItemList(String titulo,String release,String genrer,String sinopsis,String language,String poster_path,double popularity,String original_title,String compnay){
+    public ItemList(String titulo,String release,String poster_path,String genrer,double popularity,String id){
         this.titulo = titulo;
         this.release = release;
         this.poster_path = poster_path;
         //this.imgResource = imgResource;
         this.genrer = genrer;
-        this.sinopsis = sinopsis;
-        this.language=language;
+       // this.sinopsis = sinopsis;
+       // this.language=language;
         this.popularity = popularity;
-        this.original_title = original_title;
-        this.company = company;
+       // this.original_title = original_title;
+        this.id = id;
     }
     public String getPosterPath(){return poster_path;}
     public String getTitulo(){return titulo;}
@@ -26,7 +27,7 @@ public class ItemList implements Serializable {
     public  String getSinopsis(){return sinopsis;}
     public  String getLanguage(){return language;}
     public double getPopularity(){return popularity;}
-    public String getOriginal_title(){return original_title;}
-     public String getCompany(){return company;}
+    //public String getOriginal_title(){return original_title;}
+     public String getId(){return id;}
     //public int getImgResource(){return imgResource;}
 }
