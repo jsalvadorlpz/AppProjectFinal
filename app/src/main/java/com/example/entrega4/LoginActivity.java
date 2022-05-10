@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void login(View view){
         //Intent principal = new Intent(this,MainActivity.class);
-        Intent principal = new Intent(this,GetDatos.class);
+        Intent principal = new Intent(this,MainActivity.class);
         String name = user.getText().toString();
         String contra = password.getText().toString();
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);

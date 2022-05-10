@@ -20,10 +20,7 @@ public interface TheMovieDatasetApi {
             @Query("api_key") String apikey,
             @Query("page") int page
     );
-     @GET("3/genre/movie/list")
-    Call<GenreResults> listOfGenre(
-          @Query("api_key") String apikey
-     );
+
     @GET("/3/tv/{category}")
     Call<SeriesResults> listOfSeries(
             @Path("category") String category,
@@ -31,11 +28,7 @@ public interface TheMovieDatasetApi {
             @Query("language") String language,
             @Query("page") int page
     );
-    @GET("/3/company/{company_id}")
-    Call<CompanyResults> listOfCompanys(
-            @Path("company_id") Integer company_id,
-            @Query("api_key") String apikey
-    );
+
 
     @GET("/3/movie/{movie_id}")
     Call<MovieDetailsResults> listOfMovieDetails(

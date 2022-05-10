@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +36,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainFragment extends Fragment {
     RecyclerAdapter recyclerAdapter;
     RecyclerView recyclerView;
-    List<ItemList> itemList;
+    //List<ItemList> itemList;
+    List<MovieResults.ResultsBean> listapeliculas;
+    List<ItemList> StartitemList;
     Button anterior,siguiente;
     Activity actividad;
     iComunicaFragments interfaceComunicateFragmets;
@@ -48,20 +49,25 @@ public class MainFragment extends Fragment {
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
 
     public static String BASE_URL = "https://api.themoviedb.org";
-    public static int PAGE = 1;
+    public static int PAGE = 2;
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public static String  LANGUAGE = "en-US";
     public static String CATEGORY="popular";
-    public int id;
-    public String titulo,release,poster_path,sinopsis,language,original_title,nombregeneros,gen,company;
-    public List<String> titulos, releases,generos3,sinopsisList,languages, poster_paths,original_titles,generos_final,companys,StringMovieIds;
+    public int id,cantidadMovies;
+    public String titulo,poster_path;
+    public List<String> titulos, releases,generos3,poster_paths,StringMovieIds;
     public List<Integer> generos,generosid,MovieIds;
     public List<List<Integer>> generos2;
-    public double popularity;
-    public List<Object> generos4;
     public List<Double> popolularitys;
-    public int cantidad2,j,i,z  = 0;
-    public boolean encontrado;
+    public List<MovieResults.ResultsBean> peliculas;
+
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,20 +75,26 @@ public class MainFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.main_fragment,container, false);
         //initViews
-        recyclerView = view.findViewById(R.id.recyclerview_movies);
+       recyclerView = view.findViewById(R.id.recyclerview_movies);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>());
+        recyclerView.setAdapter(recyclerAdapter);
+
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //anterior = view.findViewById(R.id.botonAnterior);
         //siguiente = view.findViewById(R.id.botonSnterior);
-        itemList = new ArrayList<>();
+        //itemList = new ArrayList<>();
 
-        titulos = new ArrayList<String>();
-        releases = new ArrayList<String>();
-        generos = new ArrayList<Integer>();
-        generos2 = new ArrayList<List<Integer>>();
-        generos3 = new ArrayList<String>();
-        poster_paths = new ArrayList<String>();
-        popolularitys = new ArrayList<Double>();
-        MovieIds = new ArrayList<Integer>();
-        StringMovieIds = new ArrayList<String>();
+        //titulos = new ArrayList<String>();
+        //releases = new ArrayList<String>();
+        //generos = new ArrayList<Integer>();
+        //generos2 = new ArrayList<List<Integer>>();
+        //generos3 = new ArrayList<String>();
+        //poster_paths = new ArrayList<String>();
+        //popolularitys = new ArrayList<Double>();
+        //StringMovieIds = new ArrayList<String>();
+
+        peliculas = new ArrayList<MovieResults.ResultsBean>();
 
 
 
@@ -92,52 +104,52 @@ public class MainFragment extends Fragment {
                 .build();
         TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
         Call<MovieResults> call = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAGE,PAGE);
+
         call.enqueue(new Callback<MovieResults>() {
             @Override
             public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
+                Log.e("","Entra en el OnResponse");
                 MovieResults results = response.body();
                 List<MovieResults.ResultsBean> listOfMovies = results.getResults();
+                peliculas = listOfMovies;
+                cantidadMovies = listOfMovies.size();
+                Log.e("",String.valueOf(cantidadMovies));
+                //int iterador =0;
 
-                int cantidad = listOfMovies.size();
-                cantidad2 = cantidad;
+                //while (iterador < cantidadMovies) {
+                  //  MovieResults.ResultsBean Movie = listOfMovies.get(iterador);
 
-                while (i < cantidad) {
-                    MovieResults.ResultsBean Movie = listOfMovies.get(i);
-                    titulo = (String) Movie.getTitle();
-                    release = (String) Movie.getRelease_date();
-                    generos = (List<Integer>) Movie.getGenre_ids();
-                    poster_path= (String) Movie.getPoster_path();
-                    popularity = (Double) Movie.getPopularity();
-                    id = (Integer)Movie.getId();
-
-                    titulos.add(titulo);
-                    releases.add(release);
-                    generos2.add(generos);
-                    poster_paths.add(poster_path);
-                    popolularitys.add(popularity);
-                    MovieIds.add(id);
-                    StringMovieIds.add(String.valueOf(id));
+                    //titulos.add(Movie.getTitle());
+                    //releases.add(Movie.getRelease_date());
+                    //generos2.add(Movie.getGenre_ids());
+                    //poster_paths.add(Movie.getPoster_path());
+                    //popolularitys.add(Movie.getPopularity());
+                    //StringMovieIds.add(String.valueOf(Movie.getId()));
 
 
-                    i++;
-                }
-                i = 0;
-                while (i < cantidad2) {
-                    generos3.add(String.valueOf(generos2.get(i)));
-                    i++;
-                }
+                    //iterador++;
+                //}
+                //iterador = 0;
+                //while (iterador < cantidadMovies) {
+                  //  generos3.add(String.valueOf(generos2.get(iterador)));
+                    //iterador++;
+                //}
+                ///initValues();
                 initValues();
 
             }
 
-
-
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {
-
+                Log.e("","entra fallo");
             }
 
         });
+        //recyclerView = view.findViewById(R.id.recyclerview_movies);
+        //itemList = peliculas;
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //recyclerAdapter = new RecyclerAdapter(getContext(),peliculas);
+        //recyclerView.setAdapter(recyclerAdapter);
 
         return view;
     }
@@ -146,27 +158,22 @@ public class MainFragment extends Fragment {
 
 
     private void initValues(){
-        itemList = getItems();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerAdapter = new RecyclerAdapter(getContext(),itemList);
-        recyclerView.setAdapter(recyclerAdapter);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listapeliculas = getItems();
+        recyclerAdapter.updateData(listapeliculas);
+
+        //recyclerAdapter.updateData(itemList);
+        //recyclerAdapter = new RecyclerAdapter(getContext(),listapeliculas);
+        //recyclerView.setAdapter(recyclerAdapter);
+        //recyclerAdapter.notifyDataSetChanged();
 
 
         recyclerAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String titulo2 = itemList.get(recyclerView.getChildAdapterPosition(view)).getTitulo();
-                Toast.makeText(getContext(),"selecciono"+titulo2,Toast.LENGTH_SHORT).show();
-                Log.e("","selecciono"+titulo2);
                 Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
-                detalle.putExtra("titulo",titulo2);
-                detalle.putExtra("genre",itemList.get(recyclerView.getChildAdapterPosition(view)).getGenrer());
-                detalle.putExtra("date",itemList.get(recyclerView.getChildAdapterPosition(view)).getRelease());
-                // detalle.putExtra("sinopsis",itemList.get(recyclerView.getChildAdapterPosition(view)).getSinopsis());
-                //detalle.putExtra("language",itemList.get(recyclerView.getChildAdapterPosition(view)).getLanguage());
-                detalle.putExtra("image",itemList.get(recyclerView.getChildAdapterPosition(view)).getPosterPath());
-                detalle.putExtra("id",itemList.get(recyclerView.getChildAdapterPosition(view)).getId());
+                detalle.putExtra("id",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId());
                 startActivity(detalle);
 
             }
@@ -174,19 +181,22 @@ public class MainFragment extends Fragment {
 
 
     }
-    private List<ItemList> getItems(){
-        List<ItemList> itemLists = new ArrayList<>();
-        int iterador = 0;
-        while(iterador<cantidad2) {
+    //private List<ItemList> getItems(){
+        //List<ItemList> itemLists = new ArrayList<>();
+        //int iterador = 0;
+        //while(iterador<cantidadMovies) {
 
-            itemLists.add(new ItemList(titulos.get(iterador), releases.get(iterador),
-                    poster_paths.get(iterador), generos3.get(iterador),
-                    popolularitys.get(iterador),StringMovieIds.get(iterador)));
-            iterador++;
-        }
+          //  itemLists.add(new ItemList(titulos.get(iterador), releases.get(iterador),
+            //        poster_paths.get(iterador), generos3.get(iterador),
+              //      popolularitys.get(iterador),StringMovieIds.get(iterador)));
+            //iterador++;
+        //}
 
 
-        return itemLists;
+        //return itemLists;
+    //}
+    private List<MovieResults.ResultsBean> getItems(){
+        return peliculas;
     }
 
     @Override

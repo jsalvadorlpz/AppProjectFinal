@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,16 +44,16 @@ public class TrendingFragment extends Fragment {
     public static String BASE_URL = "https://api.themoviedb.org";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public static int PAGE = 1;
-    public static String MEDIA_TYPE = "all";
+    public static String MEDIA_TYPE = "movie";
     public static String TIME_WINDOW = "week";
     public String titulo,release,poster_path,sinopsis,language,original_title;
-    public List<String> titulos, releases,generos3,sinopsisList,languages, poster_paths,original_titles;
+    public List<String> titulos, releases,generos3,sinopsisList,languages, poster_paths,original_titles,TrendingIds;
     public List<Integer> generos;
     public List<List<Integer>> generos2;
     public double popularity;
     public List<Object> generos4;
     public List<Double> popolularitys;
-    public int cantidad2,j,i  = 0;
+    public int cantidad2,j,iterador  = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,16 +65,17 @@ public class TrendingFragment extends Fragment {
         itemList = new ArrayList<>();
 
         titulos = new ArrayList<String>();
-        original_titles = new ArrayList<String>();
+        //original_titles = new ArrayList<String>();
         releases = new ArrayList<String>();
         generos = new ArrayList<Integer>();
         generos2 = new ArrayList<List<Integer>>();
         generos3 = new ArrayList<String>();
-        sinopsisList = new ArrayList<>();
-        languages = new ArrayList<>();
+        //sinopsisList = new ArrayList<>();
+        //languages = new ArrayList<>();
         poster_paths = new ArrayList<String>();
         popolularitys = new ArrayList<Double>();
-        generos4 = new ArrayList<Object>();
+        //generos4 = new ArrayList<Object>();
+        TrendingIds = new ArrayList<String>();
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -93,41 +93,32 @@ public class TrendingFragment extends Fragment {
                 int cantidad = listOfTrending.size();
                 cantidad2 = cantidad;
 
-                while (i < cantidad) {
-                    TrendingResults.Result trending = listOfTrending.get(i);
-                    titulo = (String) trending.getTitle();
-                    release = (String) trending.getFirstAirDate();
-                    generos = (List<Integer>) trending.getGenreIds();
-                    sinopsis = (String) trending.getOverview();
-                    language= (String)trending.getOriginalLanguage();
-                    poster_path= (String) trending.getPosterPath();
-                    popularity = (Double) trending.getPopularity();
-                    //Log.e("",titulo);
+                while (iterador < cantidad) {
+                    TrendingResults.Result trending = listOfTrending.get(iterador);
 
-                    original_title = (String) trending.getOriginalTitle();
-                    //Log.e("",Movie.getOriginal_title());
-                    titulos.add(titulo);
-                    releases.add(release);
-                    generos2.add(generos);
-                    sinopsisList.add(sinopsis);
-                    languages.add(language);
-                    poster_paths.add(poster_path);
-                    popolularitys.add(popularity);
-                    original_titles.add(original_title);
+                    titulos.add(trending.getTitle());
+                    releases.add(trending.getFirstAirDate());
+                    generos2.add(trending.getGenreIds());
+                    //sinopsisList.add(trending.getOverview());
+                    //languages.add(trending.getOriginalLanguage());
+                    poster_paths.add(trending.getPosterPath());
+                    popolularitys.add(trending.getPopularity());
+                    //original_titles.add(trending.getOriginalTitle());
+                    TrendingIds.add(String.valueOf(trending.getId()));
 
-                    i = i + 1;
+                    iterador++;
                 }
-                i = 0;
-                while (i < cantidad) {
-                    generos3.add(String.valueOf(generos2.get(i)));
-                    i++;
+                iterador = 0;
+                while (iterador < cantidad) {
+                    generos3.add(String.valueOf(generos2.get(iterador)));
+                    iterador++;
                 }
                 initValues();
 
             }
             @Override
             public void onFailure(Call<TrendingResults> call, Throwable t) {
-
+                Log.e("","entra en el fallo");
             }
         });
 
@@ -143,18 +134,9 @@ public class TrendingFragment extends Fragment {
         recyclerAdapter3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String titulo2 = itemList.get(recyclerView3.getChildAdapterPosition(view)).getTitulo();
-                Toast.makeText(getContext(),"selecciono"+titulo2,Toast.LENGTH_SHORT).show();
-                Log.e("","selecciono"+titulo2);
-                Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
-                detalle.putExtra("titulo",titulo2);
-                detalle.putExtra("genre",itemList.get(recyclerView3.getChildAdapterPosition(view)).getGenrer());
-                detalle.putExtra("date",itemList.get(recyclerView3.getChildAdapterPosition(view)).getRelease());
-                detalle.putExtra("sinopsis",itemList.get(recyclerView3.getChildAdapterPosition(view)).getSinopsis());
-                detalle.putExtra("language",itemList.get(recyclerView3.getChildAdapterPosition(view)).getLanguage());
-                detalle.putExtra("image",itemList.get(recyclerView3.getChildAdapterPosition(view)).getPosterPath());
-                detalle.putExtra("original_title",itemList.get(recyclerView3.getChildAdapterPosition(view)).getOriginal_title());
 
+                Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
+                detalle.putExtra("id",itemList.get(recyclerView3.getChildAdapterPosition(view)).getId());
                 startActivity(detalle);
 
             }
@@ -165,7 +147,9 @@ public class TrendingFragment extends Fragment {
         List<ItemListTrending> itemLists = new ArrayList<>();
         while(j<cantidad2) {
 
-            itemLists.add(new ItemListTrending(titulos.get(j), releases.get(j),generos3.get(j),sinopsisList.get(j),languages.get(j),poster_paths.get(j),popolularitys.get(j),original_titles.get(j)));
+            itemLists.add(new ItemListTrending(titulos.get(j), releases.get(j),
+                    generos3.get(j),poster_paths.get(j),
+                    popolularitys.get(j),TrendingIds.get(j)));
             j+=1;
         }
 

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Entrega4">
         <activity
-            android:name=".GetDatos"
+            android:name=".DetalleTrendingActivity"
             android:exported="false" />
         <activity
             android:name=".DetalleSerieActivity"

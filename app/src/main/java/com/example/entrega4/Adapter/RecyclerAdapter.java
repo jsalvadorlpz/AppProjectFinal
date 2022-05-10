@@ -13,13 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
-import com.example.entrega4.model.ItemList;
 
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements View.OnClickListener{
-    private List<ItemList> items;
+
+    private List<MovieResults.ResultsBean> peliculas;
     LayoutInflater inflater;
     Fragment fragment;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
@@ -33,12 +34,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
 
-
-    public RecyclerAdapter(Context context, List<ItemList> items){
+    //public RecyclerAdapter(Context context, List<ItemList> items){
+    public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas){
         this.inflater = LayoutInflater.from(context);
 
-        this.items = items;
+        this.peliculas = peliculas;
     }
+    public void updateData(List<MovieResults.ResultsBean> newitems) {
+        peliculas.clear();
+        peliculas.addAll(newitems);
+        notifyDataSetChanged();
+    }
+
+
 
     @NonNull
     @Override
@@ -66,14 +74,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         // El método recupera los datos correspondientes y los usa
         // para completar el diseño del contenedor de vistas.
 
-        String Titulo = items.get(position).getTitulo();
+        String Titulo = peliculas.get(position).getTitle();
         //String original_title = items.get(position).getOriginal_title();
-        String Release = items.get(position).getRelease();
-        String Genrer = items.get(position).getGenrer();
-        Double pop = items.get(position).getPopularity();
+        String Release = peliculas.get(position).getRelease_date();
+        String Genrer =String.valueOf( peliculas.get(position).getGenre_ids());
+
+        Double pop = peliculas.get(position).getPopularity();
         //Glide.with(getContext()).load(poster_paths.get(j)).into();
         View view = inflater.inflate(R.layout.item_list_view,null,false);
-        Glide.with(view).load(url_imagenes+items.get(position).getPosterPath()).into(holder.image);
+        Glide.with(view).load(url_imagenes+peliculas.get(position).getPoster_path()).into(holder.image);
         holder.Titulo.setText(Titulo);
         holder.Release.setText(Release);
         holder.Genrer.setText(Genrer);
@@ -86,7 +95,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         //holder.Release.setText(item.getRelease());
         //holder.Genrer.setText(item.getGenrer());
     }
-
 
 
     @Override
@@ -117,7 +125,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return peliculas.size();
     }
 
 }
