@@ -44,7 +44,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
         company = findViewById(R.id.prod_compa);
         idioma = findViewById(R.id.idioma);
 
-        Integer id =Integer.parseInt(getIntent().getStringExtra("id"));
+        Integer id =Integer.parseInt(getIntent().getStringExtra("idMovie"));
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -98,7 +98,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
                    sinopsis.setText(results.getOverview());
                    date.setText(results.getReleaseDate());
                    idioma.setText(results.getOriginalLanguage());
-                   image = (String) results.getPosterPath();
+                   //image = (String) results.getPosterPath();
 
 
                }
@@ -108,20 +108,8 @@ public class DetalleMovieActivity extends AppCompatActivity {
                }
           });
 
-
-        //String titulo_peli = getIntent().getStringExtra("titulo");
-        //String genre_peli = getIntent().getStringExtra("genre");
-        //String sinopsis_peli = getIntent().getStringExtra("sinopsis");
-        //String date_peli = getIntent().getStringExtra("date");
-        //String image_peli = getIntent().getStringExtra("image");
-        //String company_peli = getIntent().getStringExtra("company");
-        //titulo.setText(titulo_peli);
-        //genre.setText(GenreName);
-        //sinopsis.setText(sinopsis_peli);
-        //date.setText(date_peli);
-        //company.setText(CompanyName);
-        //View view = inflater.inflate(R.layout.activity_detallemovie,null,false);
-        Glide.with(this).load(url_imagenes+image).into(poster);
+        String image_peli = getIntent().getStringExtra("imageMovie");
+        Glide.with(this).load(url_imagenes+image_peli).into(poster);
 
 
     }

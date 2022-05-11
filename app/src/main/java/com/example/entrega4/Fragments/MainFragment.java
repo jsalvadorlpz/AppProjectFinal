@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.main_fragment,container, false);
         //initViews
-       recyclerView = view.findViewById(R.id.recyclerview_movies);
+        recyclerView = view.findViewById(R.id.recyclerview_movies);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>());
         recyclerView.setAdapter(recyclerAdapter);
@@ -103,9 +103,9 @@ public class MainFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-        Call<MovieResults> call = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAGE,PAGE);
-
-        call.enqueue(new Callback<MovieResults>() {
+        Call<MovieResults> callMovies = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAGE,PAGE);
+        Log.e("","crea la call");
+        callMovies.enqueue(new Callback<MovieResults>() {
             @Override
             public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
                 Log.e("","Entra en el OnResponse");
@@ -173,7 +173,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
-                detalle.putExtra("id",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId());
+                detalle.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
+                detalle.putExtra("imageMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getPoster_path());
                 startActivity(detalle);
 
             }

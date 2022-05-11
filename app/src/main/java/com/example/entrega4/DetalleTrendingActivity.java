@@ -3,7 +3,6 @@ package com.example.entrega4;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,8 +102,8 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                 idioma.setText(results.getOriginalLanguage());
 
 
-                View view = inflater.inflate(R.layout.activity_detalle_trending,null,false);
-                Glide.with(view).load(url_imagenes+image).into(poster);
+                //View view = inflater.inflate(R.layout.activity_detalle_trending,null,false);
+                //Glide.with(view).load(url_imagenes+image).into(poster);
 
             }
             @Override
@@ -120,7 +119,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
         date.setText(date_peli);
 
         //View view = inflater.inflate(R.layout.activity_detallemovie,null,false);
-        //Glide.with(this).load(url_imagenes+image).into(poster);
+        Glide.with(this).load(url_imagenes+image).into(poster);
 
 
 

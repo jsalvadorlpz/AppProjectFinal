@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.entrega4.Adapter.RecyclerAdapter3;
-import com.example.entrega4.DetalleMovieActivity;
+import com.example.entrega4.DetalleTrendingActivity;
 import com.example.entrega4.R;
 import com.example.entrega4.TheMovieDatasetApi;
 import com.example.entrega4.TrendingResults;
@@ -135,7 +135,7 @@ public class TrendingFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
+                Intent detalle = new Intent(getContext(), DetalleTrendingActivity.class);
                 detalle.putExtra("id",itemList.get(recyclerView3.getChildAdapterPosition(view)).getId());
                 startActivity(detalle);
 
