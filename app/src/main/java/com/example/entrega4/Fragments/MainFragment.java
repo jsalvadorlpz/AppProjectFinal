@@ -55,10 +55,6 @@ public class MainFragment extends Fragment {
     public static String CATEGORY="popular";
     public int id,cantidadMovies;
     public String titulo,poster_path;
-    public List<String> titulos, releases,generos3,poster_paths,StringMovieIds;
-    public List<Integer> generos,generosid,MovieIds;
-    public List<List<Integer>> generos2;
-    public List<Double> popolularitys;
     public List<MovieResults.ResultsBean> peliculas;
 
 
@@ -80,19 +76,6 @@ public class MainFragment extends Fragment {
         recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>());
         recyclerView.setAdapter(recyclerAdapter);
 
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //anterior = view.findViewById(R.id.botonAnterior);
-        //siguiente = view.findViewById(R.id.botonSnterior);
-        //itemList = new ArrayList<>();
-
-        //titulos = new ArrayList<String>();
-        //releases = new ArrayList<String>();
-        //generos = new ArrayList<Integer>();
-        //generos2 = new ArrayList<List<Integer>>();
-        //generos3 = new ArrayList<String>();
-        //poster_paths = new ArrayList<String>();
-        //popolularitys = new ArrayList<Double>();
-        //StringMovieIds = new ArrayList<String>();
 
         peliculas = new ArrayList<MovieResults.ResultsBean>();
 

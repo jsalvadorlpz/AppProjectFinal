@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/imgItem"
-            android:layout_width="100dp"
-            android:layout_height="135dp"
+            android:layout_width="110dp"
+            android:layout_height="145dp"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_foreground" />
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="16dp"/>
+                android:textSize="20dp"/>
             <TextView
                 android:id="@+id/Release"
                 android:layout_width="match_parent"
@@ -39,12 +39,12 @@
             <TextView
                 android:id="@+id/Genrer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16dp"/>
+                android:layout_height="30dp"
+                android:textSize="12dp"/>
 
             <RelativeLayout
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp">
 
                 <ProgressBar

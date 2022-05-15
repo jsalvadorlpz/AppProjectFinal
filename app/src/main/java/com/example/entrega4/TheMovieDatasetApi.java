@@ -28,6 +28,11 @@ public interface TheMovieDatasetApi {
             @Query("language") String language,
             @Query("page") int page
     );
+    @GET("/3/tv/{tv_id}")
+    Call<SeriesDetailsResults> listOfSerieDetals(
+            @Path("tv_id") Integer tvid,
+            @Query("api_key") String apikey
+    );
 
 
     @GET("/3/movie/{movie_id}")

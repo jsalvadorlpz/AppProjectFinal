@@ -54,29 +54,18 @@ public class TrendingFragment extends Fragment {
     public List<Object> generos4;
     public List<Double> popolularitys;
     public int cantidad2,j,iterador  = 0;
+    public List<TrendingResults.Result> trendings,listatrendings;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trending_fragment,container, false);
 
         recyclerView3 = view.findViewById(R.id.recyclerview_trending);
-        //anterior = view.findViewById(R.id.botonAnterior);
-        //siguiente = view.findViewById(R.id.botonSnterior);
-        itemList = new ArrayList<>();
-
-        titulos = new ArrayList<String>();
-        //original_titles = new ArrayList<String>();
-        releases = new ArrayList<String>();
-        generos = new ArrayList<Integer>();
-        generos2 = new ArrayList<List<Integer>>();
-        generos3 = new ArrayList<String>();
-        //sinopsisList = new ArrayList<>();
-        //languages = new ArrayList<>();
-        poster_paths = new ArrayList<String>();
-        popolularitys = new ArrayList<Double>();
-        //generos4 = new ArrayList<Object>();
-        TrendingIds = new ArrayList<String>();
-
+        listatrendings = new ArrayList<TrendingResults.Result>();
+        trendings = new ArrayList<TrendingResults.Result>();
+        recyclerView3.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerAdapter3 = new RecyclerAdapter3(getContext(),new ArrayList<>());
+        recyclerView3.setAdapter(recyclerAdapter3);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -89,30 +78,8 @@ public class TrendingFragment extends Fragment {
             public void onResponse(Call<TrendingResults> call, Response<TrendingResults> response) {
                 TrendingResults results = response.body();
                 List<TrendingResults.Result> listOfTrending = results.getResults();
+                trendings = listOfTrending;
 
-                int cantidad = listOfTrending.size();
-                cantidad2 = cantidad;
-
-                while (iterador < cantidad) {
-                    TrendingResults.Result trending = listOfTrending.get(iterador);
-
-                    titulos.add(trending.getTitle());
-                    releases.add(trending.getFirstAirDate());
-                    generos2.add(trending.getGenreIds());
-                    //sinopsisList.add(trending.getOverview());
-                    //languages.add(trending.getOriginalLanguage());
-                    poster_paths.add(trending.getPosterPath());
-                    popolularitys.add(trending.getPopularity());
-                    //original_titles.add(trending.getOriginalTitle());
-                    TrendingIds.add(String.valueOf(trending.getId()));
-
-                    iterador++;
-                }
-                iterador = 0;
-                while (iterador < cantidad) {
-                    generos3.add(String.valueOf(generos2.get(iterador)));
-                    iterador++;
-                }
                 initValues();
 
             }
@@ -126,35 +93,24 @@ public class TrendingFragment extends Fragment {
         return view;
     }
     private void initValues(){
-        recyclerView3.setLayoutManager(new LinearLayoutManager(getContext()));
-        itemList = getItems();
-        recyclerAdapter3 = new RecyclerAdapter3(getContext(),itemList);
-        recyclerView3.setAdapter(recyclerAdapter3);
+        listatrendings = getItems();
+        recyclerAdapter3.updateData(listatrendings);
 
         recyclerAdapter3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent detalle = new Intent(getContext(), DetalleTrendingActivity.class);
-                detalle.putExtra("id",itemList.get(recyclerView3.getChildAdapterPosition(view)).getId());
+                detalle.putExtra("imageTrending",listatrendings.get(recyclerView3.getChildAdapterPosition(view)).getPosterPath());
+                detalle.putExtra("idTrending",String.valueOf(listatrendings.get(recyclerView3.getChildAdapterPosition(view)).getId()));
                 startActivity(detalle);
 
             }
         });
 
     }
-    private List<ItemListTrending> getItems(){
-        List<ItemListTrending> itemLists = new ArrayList<>();
-        while(j<cantidad2) {
-
-            itemLists.add(new ItemListTrending(titulos.get(j), releases.get(j),
-                    generos3.get(j),poster_paths.get(j),
-                    popolularitys.get(j),TrendingIds.get(j)));
-            j+=1;
-        }
-
-
-        return itemLists;
+    private List<TrendingResults.Result> getItems(){
+        return trendings;
     }
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

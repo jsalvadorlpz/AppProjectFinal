@@ -45,7 +45,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
         company = findViewById(R.id.prod_compaTrending);
         idioma = findViewById(R.id.idiomaTrending);
 
-        Integer id =Integer.parseInt(getIntent().getStringExtra("id"));
+        Integer id =Integer.parseInt(getIntent().getStringExtra("idTrending"));
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -62,7 +62,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                 String CompnayName = "";
                 MovieDetailsResults results = response.body();
                 List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
-                image = (String) results.getPosterPath();
+
                 int SizeGenreList = listOfGenre.size();
                 List<MovieDetailsResults.ProductionCompany> listOfCompanys = results.getProductionCompanies();
                 int SizeCompanysList = listOfCompanys.size();
@@ -75,7 +75,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                         }else{
                             GenreName += listOfGenre.get(iteradorListaGeneros).getName() + ", ";
                         }
-                        //CompnayName += listOfCompanys.get(iteradorListaCompanys).getName() + ", ";
+
                         iteradorListaGeneros++;
                     }
                 }
@@ -88,7 +88,6 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                         }else{
                             CompnayName += listOfCompanys.get(iteradorListaCompanys).getName() + ", ";
                         }
-                        //CompnayName += listOfCompanys.get(iteradorListaCompanys).getName() + ", ";
                         iteradorListaCompanys++;
                     }
                 }
@@ -101,23 +100,13 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                 date.setText(results.getReleaseDate());
                 idioma.setText(results.getOriginalLanguage());
 
-
-                //View view = inflater.inflate(R.layout.activity_detalle_trending,null,false);
-                //Glide.with(view).load(url_imagenes+image).into(poster);
-
             }
             @Override
             public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
 
             }
         });
-
-
-
-        String date_peli = getIntent().getStringExtra("date");
-
-        date.setText(date_peli);
-
+        String image = getIntent().getStringExtra("imageTrending");
         //View view = inflater.inflate(R.layout.activity_detallemovie,null,false);
         Glide.with(this).load(url_imagenes+image).into(poster);
 

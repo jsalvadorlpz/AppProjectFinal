@@ -59,6 +59,7 @@ public class TrendingResults {
         private String releaseDate;
         private String title;
         private Boolean video;
+        @SerializedName("voteAverage")
         private Double voteAverage;
         private Integer voteCount;
         private Double popularity;

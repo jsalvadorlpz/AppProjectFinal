@@ -13,16 +13,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.entrega4.MovieDetailsResults;
 import com.example.entrega4.R;
-import com.example.entrega4.model.ItemListTrending;
+import com.example.entrega4.TheMovieDatasetApi;
+import com.example.entrega4.TrendingResults;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.ViewHolder> implements View.OnClickListener{
-    private List<ItemListTrending> items;
+    private List<TrendingResults.Result> trendings;
     LayoutInflater inflater;
+    public  String GenreName, date;
     Fragment fragment;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
+    public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
+    public static String BASE_URL = "https://api.themoviedb.org";
+
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
     //parte que es generica a todos
 
@@ -34,10 +46,10 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.View
 
 
 
-    public RecyclerAdapter3(Context context, List<ItemListTrending> items){
+    public RecyclerAdapter3(Context context, List<TrendingResults.Result> trendings){
         this.inflater = LayoutInflater.from(context);
 
-        this.items = items;
+        this.trendings = trendings;
     }
 
     @NonNull
@@ -64,29 +76,64 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.View
         //Llama a este método para asociar una ViewHolder con los datos.
         // El método recupera los datos correspondientes y los usa
         // para completar el diseño del contenedor de vistas.
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+        Integer id = trendings.get(position).getId();
+        Call<MovieDetailsResults> call3 = myInterface.listOfMovieDetails(id, API_KEY);
+        call3.enqueue(new Callback<MovieDetailsResults>() {
+            @Override
+            public void onResponse(Call<MovieDetailsResults> call, Response<MovieDetailsResults> response) {
+                int iteradorListaGeneros = 0;
 
-        String Titulo = items.get(position).getTitulo();
-        String original_title = items.get(position).getOriginal_title();
-        String Release = items.get(position).getRelease();
-        String Genrer = items.get(position).getGenrer();
-        Double pop = items.get(position).getPopularity();
+                MovieDetailsResults results = response.body();
+                List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
+                int SizeGenreList = listOfGenre.size();
+                if(SizeGenreList==1){
+                    GenreName = listOfGenre.get(iteradorListaGeneros).getName();
+                } else {
+                    while (iteradorListaGeneros < SizeGenreList) {
+                        if(iteradorListaGeneros+1==SizeGenreList){
+                            GenreName += listOfGenre.get(iteradorListaGeneros).getName();
+                        }else{
+                            GenreName += listOfGenre.get(iteradorListaGeneros).getName() + ", ";
+                            if(SizeGenreList>7&&SizeGenreList==7){
+                                iteradorListaGeneros=SizeGenreList;
+                            }
+                        }
+
+                        iteradorListaGeneros++;
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
+
+            }
+        });
+
+
+
+        Double pop = trendings.get(position).getPopularity();
+
         //Glide.with(getContext()).load(poster_paths.get(j)).into();
         View view = inflater.inflate(R.layout.item_list_view,null,false);
-        Glide.with(view).load(url_imagenes+items.get(position).getPosterPath()).into(holder.image);
-        holder.Titulo.setText(Titulo+ " ("+ original_title + ")");
-        holder.Release.setText(Release);
-        holder.Genrer.setText(Genrer);
-        holder.popu.setProgress((int) Math.round((pop/100)));
-        holder.prog.setText(String.valueOf(Math.round((pop/1000)*100.0)/100.0));
+        Glide.with(view).load(url_imagenes+trendings.get(position).getPosterPath()).into(holder.image);
+        holder.Titulo.setText(trendings.get(position).getTitle());
+        holder.Release.setText(trendings.get(position).getFirstAirDate());
+        holder.Genrer.setText(GenreName);
+        holder.popu.setProgress((int) (pop/50));
+        holder.prog.setText(String.valueOf(Math.round(((pop/50.0))*100.0)/100.0)+"%");
 
-        //ItemList item = items.get(position);
-        //holder.imgItem.setImageResource(item.getImgResource());
-        // holder.Titulo.setText(item.getTitulo());
-        //holder.Release.setText(item.getRelease());
-        //holder.Genrer.setText(item.getGenrer());
     }
 
-
+    public void updateData(List<TrendingResults.Result> newitems) {
+        trendings.clear();
+        trendings.addAll(newitems);
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onClick(View view) {
@@ -116,7 +163,7 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.View
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return trendings.size();
     }
 
 }
