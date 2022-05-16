@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ public class MainFragment extends Fragment {
     List<ItemList> StartitemList;
     Button anterior,siguiente;
     Activity actividad;
+    ProgressBar progessBar;
     iComunicaFragments interfaceComunicateFragmets;
 
 
@@ -49,7 +51,7 @@ public class MainFragment extends Fragment {
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
 
     public static String BASE_URL = "https://api.themoviedb.org";
-    public static int PAGE = 2;
+    public static int PAGE = 1;
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public static String  LANGUAGE = "en-US";
     public static String CATEGORY="popular";
@@ -75,7 +77,7 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>());
         recyclerView.setAdapter(recyclerAdapter);
-
+        progessBar = view.findViewById(R.id.progessBar);
 
         peliculas = new ArrayList<MovieResults.ResultsBean>();
 
@@ -96,61 +98,21 @@ public class MainFragment extends Fragment {
                 List<MovieResults.ResultsBean> listOfMovies = results.getResults();
                 peliculas = listOfMovies;
                 cantidadMovies = listOfMovies.size();
-                Log.e("",String.valueOf(cantidadMovies));
-                //int iterador =0;
-
-                //while (iterador < cantidadMovies) {
-                  //  MovieResults.ResultsBean Movie = listOfMovies.get(iterador);
-
-                    //titulos.add(Movie.getTitle());
-                    //releases.add(Movie.getRelease_date());
-                    //generos2.add(Movie.getGenre_ids());
-                    //poster_paths.add(Movie.getPoster_path());
-                    //popolularitys.add(Movie.getPopularity());
-                    //StringMovieIds.add(String.valueOf(Movie.getId()));
-
-
-                    //iterador++;
-                //}
-                //iterador = 0;
-                //while (iterador < cantidadMovies) {
-                  //  generos3.add(String.valueOf(generos2.get(iterador)));
-                    //iterador++;
-                //}
-                ///initValues();
                 initValues();
-
             }
-
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {
                 Log.e("","entra fallo");
             }
 
         });
-        //recyclerView = view.findViewById(R.id.recyclerview_movies);
-        //itemList = peliculas;
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //recyclerAdapter = new RecyclerAdapter(getContext(),peliculas);
-        //recyclerView.setAdapter(recyclerAdapter);
-
+        progessBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         return view;
     }
-
-
-
-
     private void initValues(){
-
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listapeliculas = getItems();
         recyclerAdapter.updateData(listapeliculas);
-
-        //recyclerAdapter.updateData(itemList);
-        //recyclerAdapter = new RecyclerAdapter(getContext(),listapeliculas);
-        //recyclerView.setAdapter(recyclerAdapter);
-        //recyclerAdapter.notifyDataSetChanged();
-
 
         recyclerAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,20 +127,7 @@ public class MainFragment extends Fragment {
 
 
     }
-    //private List<ItemList> getItems(){
-        //List<ItemList> itemLists = new ArrayList<>();
-        //int iterador = 0;
-        //while(iterador<cantidadMovies) {
 
-          //  itemLists.add(new ItemList(titulos.get(iterador), releases.get(iterador),
-            //        poster_paths.get(iterador), generos3.get(iterador),
-              //      popolularitys.get(iterador),StringMovieIds.get(iterador)));
-            //iterador++;
-        //}
-
-
-        //return itemLists;
-    //}
     private List<MovieResults.ResultsBean> getItems(){
         return peliculas;
     }

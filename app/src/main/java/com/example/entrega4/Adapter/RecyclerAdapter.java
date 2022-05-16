@@ -27,8 +27,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements View.OnClickListener{
-   // public static final int VISTA1=1;
-    //public static final int  VISTA2=2;
+    public static final int TIPO_VER_MAS=1;
+    public static final int  TIPO_NORMAL=2;
     private List<MovieResults.ResultsBean> peliculas;
     LayoutInflater inflater;
     Fragment fragment;
@@ -47,10 +47,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
 
-    //public RecyclerAdapter(Context context, List<ItemList> items){
     public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas){
         this.inflater = LayoutInflater.from(context);
-
         this.peliculas = peliculas;
     }
     public void updateData(List<MovieResults.ResultsBean> newitems) {
@@ -69,12 +67,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         // pero no completa el contenido de la vista
         // (aún no se vinculó el ViewHolder con datos específicos).
 
-
+        switch(viewType) {
+            case TIPO_NORMAL:
+            default:
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view, parent, false);
-                View view = inflater.inflate(R.layout.item_list_view,parent,false);
+                View view = inflater.inflate(R.layout.item_list_view, parent, false);
                 view.setOnClickListener(this);
                 return new ViewHolder(view);
-
+            case TIPO_VER_MAS:
+                View filaverMas =LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pie_de_vista, parent, false);
+                View viewVerMas = inflater.inflate(R.layout.item_pie_de_vista,parent,false);
+                return new ViewHolder(viewVerMas);
+        }
     }
     //el ViewHolder se utiliza para cada contenedor dentro de la vista de Recycler, para
     //vincular los datos
@@ -87,8 +91,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         // El método recupera los datos correspondientes y los usa
         // para completar el diseño del contenedor de vistas.
         //int viewType = getItemViewType(position);
-
-                //ViewHolder viewHolder = (ViewHolder) holder;
+        switch (holder.getItemViewType()) {
+            case TIPO_NORMAL:
+            default:
+                ViewHolder viewHolder = (ViewHolder) holder;
                 String Titulo = peliculas.get(position).getTitle();
                 //String original_title = items.get(position).getOriginal_title();
                 String Release = peliculas.get(position).getRelease_date();
@@ -110,51 +116,40 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
                         int SizeGenreList = listOfGenre.size();
 
-                        if(SizeGenreList==1){
+                        if (SizeGenreList == 1) {
                             GenreName = listOfGenre.get(iteradorListaGeneros).getName();
                         } else {
                             while (iteradorListaGeneros < SizeGenreList) {
-                                if(iteradorListaGeneros+1==SizeGenreList){
+                                if (iteradorListaGeneros + 1 == SizeGenreList) {
                                     GenreName += listOfGenre.get(iteradorListaGeneros).getName();
-                                }else{
+                                } else {
                                     GenreName += listOfGenre.get(iteradorListaGeneros).getName() + ", ";
-                                    if(SizeGenreList>6&&SizeGenreList==6){
-                                        iteradorListaGeneros=SizeGenreList;
+                                    if (SizeGenreList > 6 && SizeGenreList == 6) {
+                                        iteradorListaGeneros = SizeGenreList;
                                     }
                                 }
                                 iteradorListaGeneros++;
                             }
                         }
                     }
+
                     @Override
                     public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
-
                     }
                 });
-
-
-
-
-
-
                 Double pop = peliculas.get(position).getVote_average();
                 //Glide.with(getContext()).load(poster_paths.get(j)).into();
-                View view = inflater.inflate(R.layout.item_list_view,null,false);
-                Glide.with(view).load(url_imagenes+peliculas.get(position).getPoster_path()).into(holder.image);
-                holder.Titulo.setText(Titulo);
-                holder.Release.setText(Release);
-                holder.Genrer.setText(GenreName);
-                holder.popu.setProgress((int) Math.round((pop*10)));
-                holder.prog.setText(String.valueOf(Math.round((pop*10)*100.0)/100.0)+"%");
+                View view = inflater.inflate(R.layout.item_list_view, null, false);
+                Glide.with(view).load(url_imagenes + peliculas.get(position).getPoster_path()).into(viewHolder.image);
+                viewHolder.Titulo.setText(Titulo);
+                viewHolder.Release.setText(Release);
+                viewHolder.Genrer.setText(GenreName);
+                viewHolder.popu.setProgress((int) Math.round((pop * 10)));
+                viewHolder.prog.setText(String.valueOf(Math.round((pop * 10) * 100.0) / 100.0) + "%");
+            case TIPO_VER_MAS:
+                //CargaMasViewHolder cargarMasViewHolder = (CargaMasViewHolder) holder;
 
-
-
-
-        //ItemList item = items.get(position);
-        //holder.imgItem.setImageResource(item.getImgResource());
-        // holder.Titulo.setText(item.getTitulo());
-        //holder.Release.setText(item.getRelease());
-        //holder.Genrer.setText(item.getGenrer());
+        }
     }
 
 
@@ -192,6 +187,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
 
     }
+    @Override
+    public int getItemViewType(int position){
+        if(position == peliculas.size()-1)return TIPO_VER_MAS;
+        return TIPO_NORMAL;
+    }
+
 
     @Override
     public int getItemCount() {
