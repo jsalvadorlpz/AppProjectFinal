@@ -1,7 +1,6 @@
 package com.example.entrega4.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +21,6 @@ import com.example.entrega4.DetalleMovieActivity;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
 import com.example.entrega4.TheMovieDatasetApi;
-import com.example.entrega4.iComunicaFragments;
-import com.example.entrega4.model.ItemList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +36,11 @@ public class MainFragment extends Fragment {
     RecyclerView recyclerView;
     //List<ItemList> itemList;
     List<MovieResults.ResultsBean> listapeliculas;
-    List<ItemList> StartitemList;
+
     Button anterior,siguiente;
     Activity actividad;
     ProgressBar progessBar;
-    iComunicaFragments interfaceComunicateFragmets;
+
 
 
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
@@ -121,8 +118,9 @@ public class MainFragment extends Fragment {
                 detalle.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
                 detalle.putExtra("imageMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getPoster_path());
                 startActivity(detalle);
-
+                if(recyclerView.getChildAdapterPosition(view)==peliculas.size()+1){Log.e("","carga mas");}
             }
+
         });
 
 
@@ -132,19 +130,6 @@ public class MainFragment extends Fragment {
         return peliculas;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if(context instanceof Activity){
-            this.actividad = (Activity) context;
-            interfaceComunicateFragmets = (iComunicaFragments) this.actividad;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 
 
 

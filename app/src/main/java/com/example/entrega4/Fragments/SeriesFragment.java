@@ -1,7 +1,6 @@
 package com.example.entrega4.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +20,6 @@ import com.example.entrega4.DetalleSerieActivity;
 import com.example.entrega4.R;
 import com.example.entrega4.SeriesResults;
 import com.example.entrega4.TheMovieDatasetApi;
-import com.example.entrega4.iComunicaFragments;
-import com.example.entrega4.model.ItemListSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +33,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SeriesFragment extends Fragment {
     RecyclerAdapter2 recyclerAdapter2;
     RecyclerView recyclerView2;
-    List<ItemListSeries> itemListSeries;
+
     Button anterior,siguiente;
     Activity actividad;
-    iComunicaFragments interfaceComunicateFragmets;
+
 
 
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
@@ -121,24 +118,7 @@ public class SeriesFragment extends Fragment {
 
     }
     private List<SeriesResults.Result> getItemsSeries(){
-
-
-
         return series;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if(context instanceof Activity){
-            this.actividad = (Activity) context;
-            interfaceComunicateFragmets = (iComunicaFragments) this.actividad;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
 

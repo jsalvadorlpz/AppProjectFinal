@@ -15,10 +15,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.entrega4.Fragments.MainFragment;
 import com.example.entrega4.Fragments.SeriesFragment;
 import com.example.entrega4.Fragments.TrendingFragment;
-import com.example.entrega4.model.ItemList;
+
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, iComunicaFragments{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
@@ -88,8 +88,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @Override
-    public void enviarItemList(ItemList items) {
-
-    }
 }
