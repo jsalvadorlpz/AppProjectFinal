@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.entrega4.Adapter.RecyclerAdapter;
 import com.example.entrega4.DetalleMovieActivity;
+import com.example.entrega4.MovieDetailsResults;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
 import com.example.entrega4.TheMovieDatasetApi;
@@ -53,13 +54,14 @@ public class MainFragment extends Fragment {
     public static String  LANGUAGE = "en-US";
     public static String CATEGORY="popular";
     public int id,cantidadMovies;
-    public String titulo,poster_path;
+    public String titulo,poster_path,GenreName;
     public List<MovieResults.ResultsBean> peliculas;
-
+    public List<String> generos;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
+        generos = new ArrayList<String>();
+        peliculas = new ArrayList<MovieResults.ResultsBean>();
 
     }
 
@@ -74,11 +76,8 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>());
         recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setVisibility(View.INVISIBLE);
         progessBar = view.findViewById(R.id.progessBar);
-
-        peliculas = new ArrayList<MovieResults.ResultsBean>();
-
-
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -95,7 +94,9 @@ public class MainFragment extends Fragment {
                 List<MovieResults.ResultsBean> listOfMovies = results.getResults();
                 peliculas = listOfMovies;
                 cantidadMovies = listOfMovies.size();
-                initValues();
+                getGeneros();
+                //initValues();
+
             }
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {
@@ -104,8 +105,58 @@ public class MainFragment extends Fragment {
 
         });
         progessBar.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+       // recyclerView.setVisibility(View.VISIBLE);
         return view;
+    }
+    private void getGeneros(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+        int iterador = 0;
+        while(iterador< peliculas.size()) {
+            int id = peliculas.get(iterador).getId();
+            Call<MovieDetailsResults> call3 = myInterface.listOfMovieDetails(id, API_KEY);
+            call3.enqueue(new Callback<MovieDetailsResults>() {
+                @Override
+                public void onResponse(Call<MovieDetailsResults> call, Response<MovieDetailsResults> response) {
+                    int iteradorListaGeneros = 0;
+
+                    MovieDetailsResults results = response.body();
+                    List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
+                    int SizeGenreList = listOfGenre.size();
+
+                    if (SizeGenreList == 1) {
+                        GenreName = listOfGenre.get(iteradorListaGeneros).getName();
+                        generos.add(GenreName);
+                    } else {
+                        while (iteradorListaGeneros < SizeGenreList) {
+                            if (iteradorListaGeneros + 1 == SizeGenreList) {
+                                GenreName += listOfGenre.get(iteradorListaGeneros).getName();
+                            } else {
+                                GenreName += listOfGenre.get(iteradorListaGeneros).getName() + ", ";
+                                if (SizeGenreList > 6 && SizeGenreList == 6) {
+                                    iteradorListaGeneros = SizeGenreList;
+                                }
+                            }
+                            generos.add(GenreName);
+                            Log.e("",GenreName);
+                            iteradorListaGeneros++;
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
+                }
+            });
+            iterador++;
+        }
+        initValues();
+        recyclerView.setVisibility(View.VISIBLE);
+        Log.e("","recyclerview Visible");
     }
     private void initValues(){
         listapeliculas = getItems();
