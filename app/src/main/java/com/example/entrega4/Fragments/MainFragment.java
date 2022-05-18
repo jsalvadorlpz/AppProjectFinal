@@ -118,7 +118,7 @@ public class MainFragment extends Fragment {
                 detalle.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
                 detalle.putExtra("imageMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getPoster_path());
                 startActivity(detalle);
-                if(recyclerView.getChildAdapterPosition(view)==peliculas.size()+1){Log.e("","carga mas");}
+
             }
 
         });

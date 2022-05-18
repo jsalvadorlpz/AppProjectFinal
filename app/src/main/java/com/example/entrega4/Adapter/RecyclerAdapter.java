@@ -1,18 +1,21 @@
 package com.example.entrega4.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.entrega4.Fragments.MainFragment;
 import com.example.entrega4.MovieDetailsResults;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
@@ -36,7 +39,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
     //parte que es generica a todos
     public static String BASE_URL = "https://api.themoviedb.org";
-    public static int PAGE = 2;
+
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public String GenreName;
 
@@ -69,7 +72,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return new ViewHolder(view);
         }else{
                 View filaverMas =LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pie_de_vista, parent, false);
-                View viewVerMas = inflater.inflate(R.layout.item_pie_de_vista,parent,false);return new ViewHolder(viewVerMas);
+                View viewVerMas = inflater.inflate(R.layout.item_pie_de_vista,parent,false);
+                return new FooterViewHolder(viewVerMas);
         }
     }
 
@@ -128,10 +132,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.prog.setText(String.valueOf(Math.round((pop * 10) * 100.0) / 100.0) + "%");
         } else {
 
-           // FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            footerViewHolder.cargaMas.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
+                    nextPage(MainFragment.PAGE);
+                    Log.e("",String.valueOf(MainFragment.PAGE));
+               }
+           });
         }
     }
-
+    public int nextPage(int page){return page++;}
 
 
     @Override
@@ -165,9 +177,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public FooterViewHolder(@NonNull View itemView){
             super(itemView);
             cargaMas = itemView.findViewById(R.id.cargamas);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(itemView.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
+
+                }
+            });
         }
 
     }
+
     @Override
     public int getItemViewType(int position){
         if(position == peliculas.size())return TIPO_VER_MAS;
