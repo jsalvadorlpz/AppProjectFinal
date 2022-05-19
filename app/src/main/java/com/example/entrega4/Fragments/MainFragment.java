@@ -108,21 +108,42 @@ public class MainFragment extends Fragment {
         Log.e("","Entramos en el getGeneros");
         int iteradorPeliculas = 0;
         while(iteradorPeliculas< peliculas.size()) {
-            int iteradorIds = 0;
             List<Integer> ListaGenerosPelicula = peliculas.get(iteradorPeliculas).getGenre_ids();
-            while(ListaGenerosPelicula.size()>iteradorIds){
-                int generoId = ListaGenerosPelicula.get(iteradorIds);
+            if(ListaGenerosPelicula.size()==1){
+                int generoId = ListaGenerosPelicula.get(0);
                 int iteradorListaGeneros = 0;
                 while(iteradorListaGeneros< ResultadoGeneros.size()){
-                            if(ResultadoGeneros.get(iteradorListaGeneros).getId()==generoId){
+                    if(ResultadoGeneros.get(iteradorListaGeneros).getId()==generoId){
+                        GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName();
+                    }
+                    iteradorListaGeneros++;
+                }
+                generos.add(GenreName);
+                Log.e("",GenreName);
+                GenreName = "";
+            }
+            else{
+                int iteradorIds = 0;
+                while(ListaGenerosPelicula.size()>iteradorIds){
+                    int generoId = ListaGenerosPelicula.get(iteradorIds);
+                    int iteradorListaGeneros = 0;
+                    while(iteradorListaGeneros< ResultadoGeneros.size()){
+                        if(ResultadoGeneros.get(iteradorListaGeneros).getId()==generoId){
+                            if(ListaGenerosPelicula.size()-1==iteradorIds){
+                                GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName();
+                            }else{
                                 GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName() + ", " ;
                             }
+                        }
                         iteradorListaGeneros++;
+                    }
+                    iteradorIds++;
                 }
-                iteradorIds++;
+                generos.add(GenreName);
+                Log.e("",GenreName);
+                GenreName = "";
+
             }
-            generos.add(GenreName);
-            Log.e("",GenreName);
             GenreName = "";
             iteradorPeliculas++;
         }
