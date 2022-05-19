@@ -40,5 +40,8 @@ public interface TheMovieDatasetApi {
             @Path("movie_id") Integer movie_id,
             @Query("api_key") String apikey
     );
-
+    @GET("/3/genre/movie/list")
+    Call<GenreResults> listOfGenres(
+        @Query("api_key") String apiKey
+    );
 }

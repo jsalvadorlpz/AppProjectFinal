@@ -11,37 +11,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.entrega4.Fragments.MainFragment;
-import com.example.entrega4.MovieDetailsResults;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
-import com.example.entrega4.TheMovieDatasetApi;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
     public static final int TIPO_VER_MAS=1;
     public static final int  TIPO_NORMAL=2;
     private List<MovieResults.ResultsBean> peliculas;
+    private List<String> listaGeneros;
     LayoutInflater inflater;
-    Fragment fragment;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
     //parte que es generica a todos
     public static String BASE_URL = "https://api.themoviedb.org";
 
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
-    public String GenreName;
+
 
     //listener
     private View.OnClickListener  listener;
@@ -50,13 +41,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas){
+    public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas,List<String> listaGeneros){
         this.inflater = LayoutInflater.from(context);
         this.peliculas = peliculas;
+        this.listaGeneros = listaGeneros;
     }
-    public void updateData(List<MovieResults.ResultsBean> newitems) {
+    public void updateData(List<MovieResults.ResultsBean> newitems,List<String> newGeneros) {
         peliculas.clear();
         peliculas.addAll(newitems);
+        listaGeneros.addAll(newGeneros);
         notifyDataSetChanged();
     }
 
@@ -85,49 +78,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String Titulo = peliculas.get(position).getTitle();
             String Release = peliculas.get(position).getRelease_date();
             Integer id = peliculas.get(position).getId();
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
 
-            Call<MovieDetailsResults> call3 = myInterface.listOfMovieDetails(id, API_KEY);
-            call3.enqueue(new Callback<MovieDetailsResults>() {
-                @Override
-                public void onResponse(Call<MovieDetailsResults> call, Response<MovieDetailsResults> response) {
-                    int iteradorListaGeneros = 0;
-
-                    MovieDetailsResults results = response.body();
-                    List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
-                    int SizeGenreList = listOfGenre.size();
-
-                    if (SizeGenreList == 1) {
-                        GenreName = listOfGenre.get(iteradorListaGeneros).getName();
-                    } else {
-                        while (iteradorListaGeneros < SizeGenreList) {
-                            if (iteradorListaGeneros + 1 == SizeGenreList) {
-                                GenreName += listOfGenre.get(iteradorListaGeneros).getName();
-                            } else {
-                                GenreName += listOfGenre.get(iteradorListaGeneros).getName() + ", ";
-                                if (SizeGenreList > 6 && SizeGenreList == 6) {
-                                    iteradorListaGeneros = SizeGenreList;
-                                }
-                            }
-                            iteradorListaGeneros++;
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
-                }
-            });
             Double pop = peliculas.get(position).getVote_average();
             View view = inflater.inflate(R.layout.item_list_view, null, false);
             Glide.with(view).load(url_imagenes + peliculas.get(position).getPoster_path()).into(viewHolder.image);
             viewHolder.Titulo.setText(Titulo);
             viewHolder.Release.setText(Release);
-            viewHolder.Genrer.setText(GenreName);
+            viewHolder.Genrer.setText(listaGeneros.get(position));
             viewHolder.popu.setProgress((int) Math.round((pop * 10)));
             viewHolder.prog.setText(String.valueOf(Math.round((pop * 10) * 100.0) / 100.0) + "%");
         } else {
