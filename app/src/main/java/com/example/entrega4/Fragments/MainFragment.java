@@ -206,5 +206,7 @@ public class MainFragment extends Fragment {
 
     }
 
-
+    public void cargarMas(){
+        Log.e("","interfaz funciona");
+    }
 }

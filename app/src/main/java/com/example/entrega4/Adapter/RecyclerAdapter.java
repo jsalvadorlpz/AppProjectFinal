@@ -14,15 +14,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.entrega4.Fragments.MainFragment;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
+import com.example.entrega4.TheMovieDatasetApi;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
     public static final int TIPO_VER_MAS=1;
     public static final int  TIPO_NORMAL=2;
+    public static String  LANGUAGE = "en-US";
+    public static String CATEGORY="popular";
     private List<MovieResults.ResultsBean> peliculas;
     private List<String> listaGeneros;
     LayoutInflater inflater;
@@ -30,9 +38,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
     //parte que es generica a todos
     public static String BASE_URL = "https://api.themoviedb.org";
-
+    public int page =2;
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
-
+    public List<MovieResults.ResultsBean> peliculas2;
 
     //listener
     private View.OnClickListener  listener;
@@ -48,6 +56,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
     public void updateData(List<MovieResults.ResultsBean> newitems,List<String> newGeneros) {
         peliculas.clear();
+        peliculas.addAll(newitems);
+        listaGeneros.addAll(newGeneros);
+        notifyDataSetChanged();
+    }
+    public void updatePelis(List<MovieResults.ResultsBean> newitems,List<String> newGeneros) {
         peliculas.addAll(newitems);
         listaGeneros.addAll(newGeneros);
         notifyDataSetChanged();
@@ -94,13 +107,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
-                    nextPage(MainFragment.PAGE);
-                    Log.e("",String.valueOf(MainFragment.PAGE));
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+                    Call<MovieResults> callMovies = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAGE,page);
+                    Log.e("","crea la call");
+                    callMovies.enqueue(new Callback<MovieResults>() {
+                        @Override
+                        public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
+                            Log.e("","hacemos la llamada del cargar mas");
+                            MovieResults results = response.body();
+                            List<MovieResults.ResultsBean> listOfMovies = results.getResults();
+                            peliculas2 = listOfMovies;
+
+                            updatePelis(peliculas2,listaGeneros);
+                        }
+                        @Override
+                        public void onFailure(Call<MovieResults> call, Throwable t) {
+                            Log.e("","entra fallo");
+                        }
+
+                    });
+                    page++;
                }
            });
         }
     }
-    public int nextPage(int page){return page++;}
 
 
     @Override
@@ -138,7 +172,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
+
 
                 }
             });
