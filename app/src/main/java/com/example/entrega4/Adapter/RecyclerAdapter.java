@@ -26,7 +26,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements View.OnClickListener  {
     public static final int TIPO_VER_MAS=1;
     public static final int  TIPO_NORMAL=2;
     public static String  LANGUAGE = "en-US";
@@ -47,6 +48,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setOnClickListener (View.OnClickListener listener){
         this.listener = listener;
     }
+
+
+
 
 
     public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas,List<String> listaGeneros){
@@ -107,6 +111,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
+
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create())

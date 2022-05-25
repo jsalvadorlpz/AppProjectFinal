@@ -31,6 +31,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainFragment extends Fragment {
+
     RecyclerAdapter recyclerAdapter;
     RecyclerView recyclerView;
     List<MovieResults.ResultsBean> listapeliculas;
@@ -43,7 +44,7 @@ public class MainFragment extends Fragment {
     public static String  LANGUAGE = "en-US";
     public static String CATEGORY="popular";
     public int id,cantidadMovies;
-    public String titulo,poster_path,GenreName;
+    public String titulo,GenreName;
     public List<MovieResults.ResultsBean> peliculas;
     public List<String> generos,listaGeneros;
     public List<GenreResults.Genre> ResultadoGeneros;
@@ -209,4 +210,6 @@ public class MainFragment extends Fragment {
     public void cargarMas(){
         Log.e("","interfaz funciona");
     }
+
+
 }

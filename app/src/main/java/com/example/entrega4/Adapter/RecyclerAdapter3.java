@@ -1,19 +1,20 @@
 package com.example.entrega4.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.entrega4.MovieDetailsResults;
 import com.example.entrega4.R;
 import com.example.entrega4.TheMovieDatasetApi;
 import com.example.entrega4.TrendingResults;
@@ -26,18 +27,22 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.ViewHolder> implements View.OnClickListener{
+public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements View.OnClickListener{
     private List<TrendingResults.Result> trendings;
     LayoutInflater inflater;
     public  String GenreName, date;
+    public static final int TIPO_VER_MAS=1;
+    public static final int  TIPO_NORMAL=2;
+    public static String MEDIA_TYPE = "movie";
+    public static String TIME_WINDOW = "week";
     Fragment fragment;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public static String BASE_URL = "https://api.themoviedb.org";
-
-    //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
-    //parte que es generica a todos
-
+    private List<String> listaGeneros;
+    public List<TrendingResults.Result> trendings2;
+    public int page =2;
     //listener
     private View.OnClickListener  listener;
     public void setOnClickListener (View.OnClickListener listener){
@@ -46,94 +51,91 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.View
 
 
 
-    public RecyclerAdapter3(Context context, List<TrendingResults.Result> trendings){
+    public RecyclerAdapter3(Context context, List<TrendingResults.Result> trendings,List<String> listaGeneros){
         this.inflater = LayoutInflater.from(context);
-
+        this.listaGeneros = listaGeneros;
         this.trendings = trendings;
     }
-
-    @NonNull
-    @Override
-    public RecyclerAdapter3.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Llama a este método siempre que necesita crear una ViewHolder nueva.
-        // El método crea el ViewHolder y su View asociada, y los inicializa,
-        // pero no completa el contenido de la vista
-        // (aún no se vinculó el ViewHolder con datos específicos).
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view, parent, false);
-        View view = inflater.inflate(R.layout.item_list_view,parent,false);
-        view.setOnClickListener(this);
-        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view,parent,false);
-        //inflate para modificar la jerarquia de views, para poder utiliar diseños en otras views
-        return new RecyclerAdapter3.ViewHolder(view);
-    }
-    //el ViewHolder se utiliza para cada contenedor dentro de la vista de Recycler, para
-    //vincular los datos
-    // tenemos unos datos y queremos vincularlos con esas vistas, asi que se crea el adapter
-    //public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
-    @NonNull
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerAdapter3.ViewHolder holder, int position) {
-        //Llama a este método para asociar una ViewHolder con los datos.
-        // El método recupera los datos correspondientes y los usa
-        // para completar el diseño del contenedor de vistas.
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-        Integer id = trendings.get(position).getId();
-        Call<MovieDetailsResults> call3 = myInterface.listOfMovieDetails(id, API_KEY);
-        call3.enqueue(new Callback<MovieDetailsResults>() {
-            @Override
-            public void onResponse(Call<MovieDetailsResults> call, Response<MovieDetailsResults> response) {
-                int iteradorListaGeneros = 0;
-
-                MovieDetailsResults results = response.body();
-                List<MovieDetailsResults.Genre> listOfGenre = results.getGenres();
-                int SizeGenreList = listOfGenre.size();
-                if(SizeGenreList==1){
-                    GenreName = listOfGenre.get(iteradorListaGeneros).getName();
-                } else {
-                    while (iteradorListaGeneros < SizeGenreList) {
-                        if(iteradorListaGeneros+1==SizeGenreList){
-                            GenreName += listOfGenre.get(iteradorListaGeneros).getName();
-                        }else{
-                            GenreName += listOfGenre.get(iteradorListaGeneros).getName() + ", ";
-                            if(SizeGenreList>7&&SizeGenreList==7){
-                                iteradorListaGeneros=SizeGenreList;
-                            }
-                        }
-
-                        iteradorListaGeneros++;
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
-
-            }
-        });
-
-
-
-        Double pop = trendings.get(position).getPopularity();
-
-        //Glide.with(getContext()).load(poster_paths.get(j)).into();
-        View view = inflater.inflate(R.layout.item_list_view,null,false);
-        Glide.with(view).load(url_imagenes+trendings.get(position).getPosterPath()).into(holder.image);
-        holder.Titulo.setText(trendings.get(position).getTitle());
-        holder.Release.setText(trendings.get(position).getFirstAirDate());
-        holder.Genrer.setText(GenreName);
-        holder.popu.setProgress((int) (pop/50));
-        holder.prog.setText(String.valueOf(Math.round(((pop/50.0))*100.0)/100.0)+"%");
-
-    }
-
-    public void updateData(List<TrendingResults.Result> newitems) {
+    public void updateDataTrending(List<TrendingResults.Result>  newitems, List<String> newGeneros) {
         trendings.clear();
         trendings.addAll(newitems);
+        listaGeneros.addAll(newGeneros);
         notifyDataSetChanged();
     }
+    public void updateTrending(List<TrendingResults.Result> newitems,List<String> newGeneros) {
+        trendings.addAll(newitems);
+        listaGeneros.addAll(newGeneros);
+        notifyDataSetChanged();
+    }
+
+
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType==TIPO_NORMAL) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view, parent, false);
+            View view = inflater.inflate(R.layout.item_list_view, parent, false);
+            view.setOnClickListener(this);
+            return new ViewHolder(view);
+        }else{
+            View filaverMas =LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pie_de_vista, parent, false);
+            View viewVerMas = inflater.inflate(R.layout.item_pie_de_vista,parent,false);
+            return new FooterViewHolder(viewVerMas);
+        }
+    }
+
+    @NonNull
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if(holder.getItemViewType() ==TIPO_NORMAL) {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            Double pop = trendings.get(position).getPopularity();
+            //Glide.with(getContext()).load(poster_paths.get(j)).into();
+            View view = inflater.inflate(R.layout.item_list_view, null, false);
+            Glide.with(view).load(url_imagenes + trendings.get(position).getPosterPath()).into(viewHolder.image);
+            viewHolder.Titulo.setText(trendings.get(position).getTitle());
+            viewHolder.Release.setText(trendings.get(position).getFirstAirDate());
+            viewHolder.Genrer.setText(listaGeneros.get(position));
+            viewHolder.popu.setProgress((int) (pop / 50));
+            viewHolder.prog.setText(String.valueOf(Math.round(((pop / 50.0)) * 100.0) / 100.0) + "%");
+        }else{
+            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            footerViewHolder.cargaMas.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
+
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+                    Call<TrendingResults> callTrending = myInterface.listOfTrending(MEDIA_TYPE,TIME_WINDOW,API_KEY,page);
+                    Log.e("","crea la call");
+                    callTrending.enqueue(new Callback<TrendingResults>() {
+                        @Override
+                        public void onResponse(Call<TrendingResults> call, Response<TrendingResults> response) {
+                            Log.e("","hacemos la llamada del cargar mas");
+                            TrendingResults results = response.body();
+                            List<TrendingResults.Result> listOfTrending= results.getResults();
+                            trendings2 = listOfTrending;
+
+                            updateTrending(trendings2,listaGeneros);
+                        }
+                        @Override
+                        public void onFailure(Call<TrendingResults> call, Throwable t) {
+                            Log.e("","entra fallo");
+                        }
+
+                    });
+                    page++;
+                }
+            });
+        }
+    }
+
+
 
     @Override
     public void onClick(View view) {
@@ -160,10 +162,31 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.View
         }
 
     }
+    public class FooterViewHolder extends RecyclerView.ViewHolder{
+        private TextView cargaMas;
 
+        public FooterViewHolder(@NonNull View itemView){
+            super(itemView);
+            cargaMas = itemView.findViewById(R.id.cargamas);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                }
+            });
+        }
+
+    }
+    @Override
+    public int getItemViewType(int position){
+        if(position == trendings.size())return TIPO_VER_MAS;
+        return TIPO_NORMAL;
+    }
     @Override
     public int getItemCount() {
-        return trendings.size();
+        return trendings.size()+1;
     }
 
 }

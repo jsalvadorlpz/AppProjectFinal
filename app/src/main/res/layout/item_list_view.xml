@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imgItem"
             android:layout_width="110dp"
-            android:layout_height="145dp"
+            android:layout_height="150dp"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_foreground" />
@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/Genrer"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="20dp"
                 android:textSize="12dp"/>
 
             <RelativeLayout
