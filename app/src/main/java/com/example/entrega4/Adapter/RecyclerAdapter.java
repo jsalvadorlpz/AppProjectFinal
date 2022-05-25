@@ -1,7 +1,6 @@
 package com.example.entrega4.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.entrega4.MovieResults;
 import com.example.entrega4.R;
-import com.example.entrega4.TheMovieDatasetApi;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements View.OnClickListener  {
@@ -41,7 +33,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static String BASE_URL = "https://api.themoviedb.org";
     public int page =2;
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
-    public List<MovieResults.ResultsBean> peliculas2;
+
     private botonCargarMas botonCargarMas;
 
     //listener
@@ -51,7 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
    //interface
     public interface botonCargarMas{
-        void funcionCargarMas();
+        void funcionCargarMas(int page);
    }
 
 
@@ -117,30 +109,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
-                    botonCargarMas.funcionCargarMas();
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-                    Call<MovieResults> callMovies = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAGE,page);
-                    Log.e("","crea la call");
-                    callMovies.enqueue(new Callback<MovieResults>() {
-                        @Override
-                        public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
-                            Log.e("","hacemos la llamada del cargar mas");
-                            MovieResults results = response.body();
-                            List<MovieResults.ResultsBean> listOfMovies = results.getResults();
-                            peliculas2 = listOfMovies;
-
-                            updatePelis(peliculas2,listaGeneros);
-                        }
-                        @Override
-                        public void onFailure(Call<MovieResults> call, Throwable t) {
-                            Log.e("","entra fallo");
-                        }
-
-                    });
+                    botonCargarMas.funcionCargarMas(page);
                     page++;
                }
            });

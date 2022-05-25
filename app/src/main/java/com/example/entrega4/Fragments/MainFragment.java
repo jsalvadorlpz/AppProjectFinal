@@ -48,7 +48,7 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
     public List<MovieResults.ResultsBean> peliculas;
     public List<String> generos,listaGeneros;
     public List<GenreResults.Genre> ResultadoGeneros;
-
+    public List<MovieResults.ResultsBean> peliculas2;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -57,7 +57,7 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
         peliculas = new ArrayList<MovieResults.ResultsBean>();
         listaGeneros = new ArrayList<String>();
         ResultadoGeneros = new ArrayList<GenreResults.Genre>();
-
+        peliculas2 = new ArrayList<MovieResults.ResultsBean>();
 
     }
 
@@ -211,7 +211,30 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
 
 
     @Override
-    public void funcionCargarMas() {
-        Log.e("","interfaz funciona");
+    public void funcionCargarMas(int page) {
+        Log.e("","interfaz funciona, para la pagina " + String.valueOf(page));
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+        Call<MovieResults> callMovies = myInterface.listOfMovies(CATEGORY,API_KEY,LANGUAGE,page);
+        Log.e("","crea la call");
+        callMovies.enqueue(new Callback<MovieResults>() {
+            @Override
+            public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
+                Log.e("","hacemos la llamada del cargar mas");
+                MovieResults results = response.body();
+                List<MovieResults.ResultsBean> listOfMovies = results.getResults();
+                peliculas2 = listOfMovies;
+                listapeliculas.addAll(peliculas2);
+                recyclerAdapter.updatePelis(peliculas2,listaGeneros);
+            }
+            @Override
+            public void onFailure(Call<MovieResults> call, Throwable t) {
+                Log.e("","entra fallo");
+            }
+
+        });
     }
 }
