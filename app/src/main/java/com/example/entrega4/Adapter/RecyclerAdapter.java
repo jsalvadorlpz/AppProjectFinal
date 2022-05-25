@@ -42,21 +42,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int page =2;
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public List<MovieResults.ResultsBean> peliculas2;
+    private botonCargarMas botonCargarMas;
 
     //listener
     private View.OnClickListener  listener;
     public void setOnClickListener (View.OnClickListener listener){
         this.listener = listener;
     }
+   //interface
+    public interface botonCargarMas{
+        void funcionCargarMas();
+   }
 
 
 
 
 
-    public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas,List<String> listaGeneros){
+    public RecyclerAdapter(Context context, List<MovieResults.ResultsBean> peliculas,List<String> listaGeneros,botonCargarMas botoncargarmas){
         this.inflater = LayoutInflater.from(context);
         this.peliculas = peliculas;
         this.listaGeneros = listaGeneros;
+        this.botonCargarMas = botoncargarmas;
     }
     public void updateData(List<MovieResults.ResultsBean> newitems,List<String> newGeneros) {
         peliculas.clear();
@@ -111,7 +117,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
-
+                    botonCargarMas.funcionCargarMas();
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create())

@@ -30,7 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements RecyclerAdapter.botonCargarMas{
 
     RecyclerAdapter recyclerAdapter;
     RecyclerView recyclerView;
@@ -70,7 +70,7 @@ public class MainFragment extends Fragment {
         //initViews
         recyclerView = view.findViewById(R.id.recyclerview_movies);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>(),new ArrayList<>());
+        recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>(),new ArrayList<>(),this);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setVisibility(View.INVISIBLE);
         progessBar = view.findViewById(R.id.progessBar);
@@ -207,9 +207,11 @@ public class MainFragment extends Fragment {
 
     }
 
-    public void cargarMas(){
+
+
+
+    @Override
+    public void funcionCargarMas() {
         Log.e("","interfaz funciona");
     }
-
-
 }
