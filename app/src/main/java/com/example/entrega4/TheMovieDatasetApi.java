@@ -44,4 +44,20 @@ public interface TheMovieDatasetApi {
     Call<GenreResults> listOfGenres(
         @Query("api_key") String apiKey
     );
+    @GET("/3/genre/tv/list")
+    Call<GenreTvResults> listOfGenresTv(
+            @Query("api_key") String apiKey
+    );
+
+    @GET("/3/person/{person_id}")
+    Call<PeopleResults> listOfPeople(
+            @Path("person_id") Integer personId,
+            @Query("api_key") String apikey
+    );
+
+    @GET("/3/movie/{movie_id}/credits")
+    Call<CreditResults> listOfCredit(
+            @Path("movie_id") Integer movieId,
+            @Query("api_key") String apikey
+    );
 }

@@ -29,7 +29,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TrendingFragment extends Fragment {
+public class TrendingFragment extends Fragment implements RecyclerAdapter3.botonCargarMasTrending {
 
     RecyclerAdapter3 recyclerAdapter3;
     RecyclerView recyclerView3;
@@ -39,13 +39,13 @@ public class TrendingFragment extends Fragment {
     public static int PAGE = 1;
     public static String MEDIA_TYPE = "movie";
     public static String TIME_WINDOW = "week";
-    public List<String> listaGeneros,generos;
+    public List<String> listaGeneros, generos;
     public int cantidadTrending;
-    public String GenreName,titulo;
-    public List<TrendingResults.Result> trendings, listatrendings;
+    public String GenreName, titulo;
+    public List<TrendingResults.Result> trendings, listatrendings, trendings2;
     public List<GenreResults.Genre> ResultadoGeneros;
 
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GenreName = "";
         listaGeneros = new ArrayList<String>();
@@ -53,7 +53,9 @@ public class TrendingFragment extends Fragment {
         trendings = new ArrayList<TrendingResults.Result>();
         generos = new ArrayList<String>();
         listatrendings = new ArrayList<TrendingResults.Result>();
+        trendings2 = new ArrayList<TrendingResults.Result>();
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class TrendingFragment extends Fragment {
 
         recyclerView3 = view.findViewById(R.id.recyclerview_trending);
         recyclerView3.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerAdapter3 = new RecyclerAdapter3(getContext(), new ArrayList<>(),new ArrayList<>());
+        recyclerAdapter3 = new RecyclerAdapter3(getContext(), new ArrayList<>(), new ArrayList<>(), this);
         recyclerView3.setAdapter(recyclerAdapter3);
         recyclerView3.setVisibility(View.INVISIBLE);
 
@@ -93,35 +95,34 @@ public class TrendingFragment extends Fragment {
         return view;
     }
 
-    private void getGeneros(){
-        Log.e("","Entramos en el getGeneros");
+    private void getGeneros() {
+        Log.e("", "Entramos en el getGeneros");
         int iteradorPeliculas = 0;
-        while(iteradorPeliculas< trendings.size()) {
+        while (iteradorPeliculas < trendings.size()) {
             List<Integer> ListaGenerosPelicula = trendings.get(iteradorPeliculas).getGenreIds();
-            if(ListaGenerosPelicula.size()==1){
+            if (ListaGenerosPelicula.size() == 1) {
                 int generoId = ListaGenerosPelicula.get(0);
                 int iteradorListaGeneros = 0;
-                while(iteradorListaGeneros< ResultadoGeneros.size()){
-                    if(ResultadoGeneros.get(iteradorListaGeneros).getId()==generoId){
+                while (iteradorListaGeneros < ResultadoGeneros.size()) {
+                    if (ResultadoGeneros.get(iteradorListaGeneros).getId() == generoId) {
                         GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName();
                     }
                     iteradorListaGeneros++;
                 }
                 generos.add(GenreName);
-                Log.e("",GenreName);
+                Log.e("", GenreName);
                 GenreName = "";
-            }
-            else{
+            } else {
                 int iteradorIds = 0;
-                while(ListaGenerosPelicula.size()>iteradorIds){
+                while (ListaGenerosPelicula.size() > iteradorIds) {
                     int generoId = ListaGenerosPelicula.get(iteradorIds);
                     int iteradorListaGeneros = 0;
-                    while(iteradorListaGeneros< ResultadoGeneros.size()){
-                        if(ResultadoGeneros.get(iteradorListaGeneros).getId()==generoId){
-                            if(ListaGenerosPelicula.size()-1==iteradorIds){
+                    while (iteradorListaGeneros < ResultadoGeneros.size()) {
+                        if (ResultadoGeneros.get(iteradorListaGeneros).getId() == generoId) {
+                            if (ListaGenerosPelicula.size() - 1 == iteradorIds) {
                                 GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName();
-                            }else{
-                                GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName() + ", " ;
+                            } else {
+                                GenreName += ResultadoGeneros.get(iteradorListaGeneros).getName() + ", ";
                             }
                         }
                         iteradorListaGeneros++;
@@ -129,7 +130,7 @@ public class TrendingFragment extends Fragment {
                     iteradorIds++;
                 }
                 generos.add(GenreName);
-                Log.e("",GenreName);
+                Log.e("", GenreName);
                 GenreName = "";
 
             }
@@ -138,18 +139,15 @@ public class TrendingFragment extends Fragment {
         }
         initValues();
         recyclerView3.setVisibility(View.VISIBLE);
-        Log.e("","recyclerview Visible");
+        Log.e("", "recyclerview Visible");
 
     }
-
-
-
 
 
     private void initValues() {
         listatrendings = getItems();
         listaGeneros = returnGeneros();
-        recyclerAdapter3.updateDataTrending(listatrendings,listaGeneros);
+        recyclerAdapter3.updateDataTrending(listatrendings, listaGeneros);
 
         recyclerAdapter3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +164,7 @@ public class TrendingFragment extends Fragment {
     }
 
     public void getGenres() {
-        Log.e("","Entramos en la llamada a la lista de todos los generos");
+        Log.e("", "Entramos en la llamada a la lista de todos los generos");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -181,7 +179,7 @@ public class TrendingFragment extends Fragment {
                 GenreResults results = response.body();
                 List<GenreResults.Genre> listOfGenre = results.getGenres();
                 ResultadoGeneros = listOfGenre;
-                Log.e("","Obtenemos la lista con todos los generos con tamaño: "+String.valueOf(ResultadoGeneros.size()));
+                Log.e("", "Obtenemos la lista con todos los generos con tamaño: " + String.valueOf(ResultadoGeneros.size()));
                 getGeneros();
             }
 
@@ -192,8 +190,41 @@ public class TrendingFragment extends Fragment {
         });
 
     }
-    private List<String> returnGeneros(){return generos;}
+
+    private List<String> returnGeneros() {
+        return generos;
+    }
+
     private List<TrendingResults.Result> getItems() {
         return trendings;
+    }
+
+    @Override
+    public void funcionCargarMasTrending(int page) {
+        Log.e("", "interfaz funciona, para la pagina " + String.valueOf(page));
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+        Call<TrendingResults> callTrending = myInterface.listOfTrending(MEDIA_TYPE, TIME_WINDOW, API_KEY, page);
+        Log.e("", "crea la call");
+        callTrending.enqueue(new Callback<TrendingResults>() {
+            @Override
+            public void onResponse(Call<TrendingResults> call, Response<TrendingResults> response) {
+                Log.e("", "hacemos la llamada del cargar mas");
+                TrendingResults results = response.body();
+                List<TrendingResults.Result> listOfTrending = results.getResults();
+                trendings2 = listOfTrending;
+                listatrendings.addAll(trendings2);
+                recyclerAdapter3.updateTrending(trendings2, listaGeneros);
+            }
+
+            @Override
+            public void onFailure(Call<TrendingResults> call, Throwable t) {
+                Log.e("", "entra fallo");
+            }
+
+        });
     }
 }

@@ -1,17 +1,19 @@
 package com.example.entrega4;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.entrega4.Adapter.RecyclerAdapterActores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,17 +25,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetalleMovieActivity extends AppCompatActivity {
     TextView titulo,genre,date,sinopsis,language,company,idioma;
     ImageView poster;
-    Activity activity;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
-    LayoutInflater inflater;
     public static String BASE_URL = "https://api.themoviedb.org";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
-    public String image;
+    RecyclerView recyclerView;
+    List<CreditResults.Cast> listaActores,lista10Actores;
+    RecyclerAdapterActores recyclerAdapterActores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detallemovie);
+        //RECYCLER Y ADAPTER DE ACTORES
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerviewActoresMovies);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>());
+        recyclerView.setAdapter(recyclerAdapterActores);
+        listaActores = new ArrayList<CreditResults.Cast>();
+        lista10Actores = new ArrayList<CreditResults.Cast>();
+
 
         titulo = findViewById(R.id.Title);
         genre = findViewById(R.id.Genre);
@@ -45,6 +55,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
         idioma = findViewById(R.id.idioma);
 
         Integer id =Integer.parseInt(getIntent().getStringExtra("idMovie"));
+        getCredits(id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -119,5 +130,35 @@ public class DetalleMovieActivity extends AppCompatActivity {
         Log.e("","se destruye el detalle movie");
         Toast.makeText(this,"onDestroy",Toast.LENGTH_SHORT).show();
     }
+
+    public void getCredits(Integer id){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
+
+        Call<CreditResults> call = myInterface.listOfCredit(id,API_KEY);
+        call.enqueue(new Callback<CreditResults>() {
+            @Override
+            public void onResponse(Call<CreditResults> call, Response<CreditResults> response) {
+                CreditResults results = response.body();
+                List<CreditResults.Cast> listOfActors = results.getCast();
+                listaActores = listOfActors;
+                int iterador = 0;
+                while(iterador < 10) {
+                    lista10Actores.add(listaActores.get(iterador));
+                    iterador++;
+                }
+                recyclerAdapterActores.updateDataActores(lista10Actores);
+            }
+            @Override
+            public void onFailure(Call<CreditResults> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 
 }

@@ -7,112 +7,108 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.entrega4.R;
-import com.example.entrega4.SeriesDetailsResults;
 import com.example.entrega4.SeriesResults;
-import com.example.entrega4.TheMovieDatasetApi;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.ViewHolder> implements View.OnClickListener{
+public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
     private final List<SeriesResults.Result> series;
+
     LayoutInflater inflater;
-    Fragment fragment;
+    public static final int TIPO_VER_MAS=1;
+    public static final int  TIPO_NORMAL=2;
+
+
+    public int page = 2;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
     public String genero;
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     public static String BASE_URL = "https://api.themoviedb.org";
     //para las imagenes, como el poster_path solo nos da un trozo del link que necesiamtos, tenemos que tener la primera
     //parte que es generica a todos
-
+    private RecyclerAdapter.botonCargarMas botonCargarMas;
+    private List<String> listaGeneros;
     //listener
     private View.OnClickListener  listener;
     public  void setOnClickListener(View.OnClickListener listener){
         this.listener = listener;
     }
-
-
-
-    public RecyclerAdapter2(Context context, List<SeriesResults.Result> series){
-        this.inflater = LayoutInflater.from(context);
-
-        this.series = series;
+    public interface botonCargarMas2{
+        void funcionCargarMas2(int page);
     }
 
-    public void updateData(List<SeriesResults.Result> newitems) {
+    private botonCargarMas2 botonCargarMas2;
+    public RecyclerAdapter2(Context context, List<SeriesResults.Result> series, List<String> listaGeneros, botonCargarMas2 botoncargarmas2){
+        this.inflater = LayoutInflater.from(context);
+        this.series = series;
+        this.listaGeneros = listaGeneros;
+        this.botonCargarMas2 = botoncargarmas2;
+    }
+
+    public void updateData(List<SeriesResults.Result> newitems,List<String> newGeneros) {
         series.clear();
         series.addAll(newitems);
+        listaGeneros.addAll(newGeneros);
+        notifyDataSetChanged();
+    }
+
+    public void updateSeries(List<SeriesResults.Result> newitems, List<String> newGeneros) {
+        series.addAll(newitems);
+        listaGeneros.addAll(newGeneros);
         notifyDataSetChanged();
     }
     @NonNull
     @Override
-    public RecyclerAdapter2.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Llama a este método siempre que necesita crear una ViewHolder nueva.
-        // El método crea el ViewHolder y su View asociada, y los inicializa,
-        // pero no completa el contenido de la vista
-        // (aún no se vinculó el ViewHolder con datos específicos).
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view, parent, false);
-        View view = inflater.inflate(R.layout.item_list_view,parent,false);
-        view.setOnClickListener(this);
-        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view,parent,false);
-        //inflate para modificar la jerarquia de views, para poder utiliar diseños en otras views
-        return new RecyclerAdapter2.ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType==TIPO_NORMAL) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_view, parent, false);
+            View view = inflater.inflate(R.layout.item_list_view,parent,false);
+            view.setOnClickListener(this);
+            return new ViewHolder(view);
+        }else{
+            View filaverMas =LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pie_de_vista, parent, false);
+            View viewVerMas = inflater.inflate(R.layout.item_pie_de_vista,parent,false);
+            return new FooterViewHolder2(viewVerMas);
+        }
     }
-    //el ViewHolder se utiliza para cada contenedor dentro de la vista de Recycler, para
-    //vincular los datos
-    // tenemos unos datos y queremos vincularlos con esas vistas, asi que se crea el adapter
-    //public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
+
     @NonNull
     @Override
-    public void onBindViewHolder(@NonNull RecyclerAdapter2.ViewHolder holder, int position) {
-        //Llama a este método para asociar una ViewHolder con los datos.
-        // El método recupera los datos correspondientes y los usa
-        // para completar el diseño del contenedor de vistas.
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if(holder.getItemViewType() ==TIPO_NORMAL) {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            String Titulo = series.get(position).getName();
+            String release = series.get(position).getFirstAirDate();
+            Integer id = series.get(position).getId();
+            Double pop = series.get(position).getPopularity();
+            Double average = series.get(position).getVoteAverage();
 
-        String Titulo = series.get(position).getName();
-        String release = series.get(position).getFirstAirDate();
-        Integer id = series.get(position).getId();
-        Double pop = series.get(position).getPopularity();
-        Double average = series.get(position).getVoteAverage();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-
-        Call<SeriesDetailsResults> call3 = myInterface.listOfSerieDetals(id, API_KEY);
-        call3.enqueue(new Callback<SeriesDetailsResults>() {
-            @Override
-            public void onResponse(Call<SeriesDetailsResults> call, Response<SeriesDetailsResults> response) {
-
-            }
-            @Override
-            public void onFailure(Call<SeriesDetailsResults> call, Throwable t) {
-
-            }
-        });
-
-        View view = inflater.inflate(R.layout.item_list_view,null,false);
-        Glide.with(view).load(url_imagenes+series.get(position).getPosterPath()).into(holder.image);
-        holder.Titulo.setText(Titulo);
-        holder.Release.setText(release);
-        holder.Genrer.setText(genero);
-        holder.popu.setProgress((int) Math.round((pop/60)));
-        holder.prog.setText(String.valueOf(Math.round((pop/60)*100.0)/100.0)+"%");
-
+            View view = inflater.inflate(R.layout.item_list_view, null, false);
+            Glide.with(view).load(url_imagenes + series.get(position).getPosterPath()).into(viewHolder.image);
+            viewHolder.Titulo.setText(Titulo);
+            viewHolder.Release.setText(release);
+            viewHolder.Genrer.setText(listaGeneros.get(position));
+            viewHolder.popu.setProgress((int) Math.round((pop / 60)));
+            viewHolder.prog.setText(String.valueOf(Math.round((pop / 60) * 100.0) / 100.0) + "%");
+        }else{
+            FooterViewHolder2 footerViewHolder2 = (FooterViewHolder2) holder;
+            footerViewHolder2.cargaMas.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
+                    botonCargarMas2.funcionCargarMas2(page);
+                    page++;
+                }
+            });
+        }
     }
 
 
@@ -143,9 +139,32 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
 
     }
 
+    public class FooterViewHolder2 extends RecyclerView.ViewHolder{
+        private TextView cargaMas;
+
+        public FooterViewHolder2(@NonNull View itemView){
+            super(itemView);
+            cargaMas = itemView.findViewById(R.id.cargamas);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public int getItemViewType(int position){
+        if(position == series.size())return TIPO_VER_MAS;
+        return TIPO_NORMAL;
+    }
     @Override
     public int getItemCount() {
-        return series.size();
+        return series.size()+1;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.entrega4.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.entrega4.R;
-import com.example.entrega4.TheMovieDatasetApi;
 import com.example.entrega4.TrendingResults;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements View.OnClickListener{
@@ -43,18 +35,24 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<String> listaGeneros;
     public List<TrendingResults.Result> trendings2;
     public int page =2;
+    private botonCargarMasTrending botonCargarMasTrending;
     //listener
     private View.OnClickListener  listener;
     public void setOnClickListener (View.OnClickListener listener){
         this.listener = listener;
     }
 
+    public interface botonCargarMasTrending{
+        void funcionCargarMasTrending(int page);
+    }
 
 
-    public RecyclerAdapter3(Context context, List<TrendingResults.Result> trendings,List<String> listaGeneros){
+    public RecyclerAdapter3(Context context, List<TrendingResults.Result> trendings,List<String> listaGeneros,
+                            botonCargarMasTrending botoncargarmastrending){
         this.inflater = LayoutInflater.from(context);
         this.listaGeneros = listaGeneros;
         this.trendings = trendings;
+        this.botonCargarMasTrending = botoncargarmastrending;
     }
     public void updateDataTrending(List<TrendingResults.Result>  newitems, List<String> newGeneros) {
         trendings.clear();
@@ -62,7 +60,7 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerView.ViewHold
         listaGeneros.addAll(newGeneros);
         notifyDataSetChanged();
     }
-    public void updateTrending(List<TrendingResults.Result> newitems,List<String> newGeneros) {
+    public  void updateTrending(List<TrendingResults.Result> newitems, List<String> newGeneros) {
         trendings.addAll(newitems);
         listaGeneros.addAll(newGeneros);
         notifyDataSetChanged();
@@ -105,30 +103,7 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas",Toast.LENGTH_SHORT).show();
-
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-                    Call<TrendingResults> callTrending = myInterface.listOfTrending(MEDIA_TYPE,TIME_WINDOW,API_KEY,page);
-                    Log.e("","crea la call");
-                    callTrending.enqueue(new Callback<TrendingResults>() {
-                        @Override
-                        public void onResponse(Call<TrendingResults> call, Response<TrendingResults> response) {
-                            Log.e("","hacemos la llamada del cargar mas");
-                            TrendingResults results = response.body();
-                            List<TrendingResults.Result> listOfTrending= results.getResults();
-                            trendings2 = listOfTrending;
-
-                            updateTrending(trendings2,listaGeneros);
-                        }
-                        @Override
-                        public void onFailure(Call<TrendingResults> call, Throwable t) {
-                            Log.e("","entra fallo");
-                        }
-
-                    });
+                    botonCargarMasTrending.funcionCargarMasTrending(page);
                     page++;
                 }
             });
