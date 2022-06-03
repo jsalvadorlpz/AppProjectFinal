@@ -109,6 +109,14 @@
 
             </TextView>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewActoresSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:scrollbars="horizontal"
+                app:reverseLayout="true" />
+
             <TextView
                 android:id="@+id/sin"
                 android:layout_width="match_parent"

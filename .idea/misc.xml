@@ -6,6 +6,7 @@
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/drawable/circle.xml" value="0.1" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/drawable/input.xml" value="0.1" />
+        <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/activity_actores_movie.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/activity_detalle_serie.xml" value="0.1" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/activity_detalle_trending.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/activity_detallemovie.xml" value="0.1" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/genre_and_companys.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/item_actores_cargartodos.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/item_actors.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/item_actors_all.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/item_list_view.xml" value="0.264" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/item_pie_de_vista.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/usuario/AndroidStudioProjects/Entrega4/app/src/main/res/layout/main_fragment.xml" value="0.1" />

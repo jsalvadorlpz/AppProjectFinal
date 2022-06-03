@@ -7,20 +7,9 @@
     android:orientation="vertical"
     android:layout_marginBottom="20dp">
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/drawer_toolbar">
 
-    </include>
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/progessBar"
-        android:visibility="visible"
-        >
 
-    </ProgressBar>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_movies"

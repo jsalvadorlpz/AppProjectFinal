@@ -1,5 +1,6 @@
 package com.example.entrega4;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     List<CreditResults.Cast> listaActores,lista10Actores;
     RecyclerAdapterActores recyclerAdapterActores;
+    Integer idpelicula,id2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
         //RECYCLER Y ADAPTER DE ACTORES
         recyclerView = (RecyclerView) findViewById(R.id.recyclerviewActoresMovies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>());
+        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>(),id2);
         recyclerView.setAdapter(recyclerAdapterActores);
         listaActores = new ArrayList<CreditResults.Cast>();
         lista10Actores = new ArrayList<CreditResults.Cast>();
@@ -55,6 +57,14 @@ public class DetalleMovieActivity extends AppCompatActivity {
         idioma = findViewById(R.id.idioma);
 
         Integer id =Integer.parseInt(getIntent().getStringExtra("idMovie"));
+        idpelicula = id;
+        id2 = id;
+        Intent actores  = new Intent(this,ActoresMovie.class);
+        Bundle extras = new Bundle();
+        extras.putInt("idepeli",idpelicula);
+
+
+        //actores.putExtra(extras);
         getCredits(id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -150,7 +160,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
                     lista10Actores.add(listaActores.get(iterador));
                     iterador++;
                 }
-                recyclerAdapterActores.updateDataActores(lista10Actores);
+                recyclerAdapterActores.updateDataActores(lista10Actores,id2);
             }
             @Override
             public void onFailure(Call<CreditResults> call, Throwable t) {

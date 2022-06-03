@@ -1,6 +1,7 @@
 package com.example.entrega4.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,26 +13,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.entrega4.ActoresMovie;
 import com.example.entrega4.CreditResults;
 import com.example.entrega4.R;
 
 import java.util.List;
 
-public class RecyclerAdapterActores extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class RecyclerAdapterActores extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     public static final int TIPO_VER_MAS=1;
     public static final int  TIPO_NORMAL=2;
     LayoutInflater inflater;
     private List<CreditResults.Cast>  listaActores;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
+    Context context;
+    Integer id;
 
    //constructor
-   public RecyclerAdapterActores(Context context, List<CreditResults.Cast> listaActores){
+   public RecyclerAdapterActores(Context context, List<CreditResults.Cast> listaActores, Integer id){
        this.inflater = LayoutInflater.from(context);
        this.listaActores = listaActores;
+       this.context = context;
+       this.id = id;
    }
-    public void updateDataActores(List<CreditResults.Cast> newitems) {
+    public void updateDataActores(List<CreditResults.Cast> newitems,Integer id) {
         listaActores.clear();
         listaActores.addAll(newitems);
+        this.id = id;
         notifyDataSetChanged();
     }
 
@@ -66,6 +73,9 @@ public class RecyclerAdapterActores extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas actores",Toast.LENGTH_SHORT).show();
 
+                    Intent verTodoslosActores = new Intent(context, ActoresMovie.class);
+                    verTodoslosActores.putExtra("idpelicula",id);
+                    context.startActivity(verTodoslosActores);
                 }
             });
         }

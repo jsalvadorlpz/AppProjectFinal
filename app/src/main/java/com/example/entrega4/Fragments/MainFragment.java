@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.entrega4.ActoresMovie;
 import com.example.entrega4.Adapter.RecyclerAdapter;
 import com.example.entrega4.DetalleMovieActivity;
 import com.example.entrega4.GenreResults;
@@ -73,7 +74,7 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
         recyclerAdapter = new RecyclerAdapter(getContext(),new ArrayList<>(),new ArrayList<>(),this);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setVisibility(View.INVISIBLE);
-        progessBar = view.findViewById(R.id.progessBar);
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -101,8 +102,8 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
             }
 
         });
-        progessBar.setVisibility(View.GONE);
-       // recyclerView.setVisibility(View.VISIBLE);
+
+
         return view;
     }
     private void getGeneros(){
@@ -164,6 +165,8 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
             @Override
             public void onClick(View view) {
                 Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
+                Intent actores = new Intent(getContext(), ActoresMovie.class);
+                actores.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
                 detalle.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
                 detalle.putExtra("imageMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getPoster_path());
                 startActivity(detalle);
