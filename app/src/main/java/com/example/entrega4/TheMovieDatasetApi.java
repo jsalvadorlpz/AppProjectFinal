@@ -60,4 +60,9 @@ public interface TheMovieDatasetApi {
             @Path("movie_id") Integer movieId,
             @Query("api_key") String apikey
     );
+    @GET("/3/tv/{tv_id}/credits")
+    Call<CreditResultTv> listOfCreditTv(
+            @Path("tv_id") Integer tvId,
+            @Query("api_key") String apikey
+    );
 }

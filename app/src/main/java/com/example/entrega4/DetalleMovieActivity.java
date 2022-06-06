@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetalleMovieActivity extends AppCompatActivity {
     TextView titulo,genre,date,sinopsis,language,company,idioma;
-    ImageView poster;
+    ImageView poster,poster2;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
     public static String BASE_URL = "https://api.themoviedb.org";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
@@ -33,6 +33,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
     List<CreditResults.Cast> listaActores,lista10Actores;
     RecyclerAdapterActores recyclerAdapterActores;
     Integer idpelicula,id2;
+    String back, post;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
         sinopsis = findViewById(R.id.sinopsis);
         language = findViewById(R.id.director);
         poster = findViewById(R.id.imageView);
+        poster2 = findViewById(R.id.imageViewBack);
         company = findViewById(R.id.prod_compa);
         idioma = findViewById(R.id.idioma);
 
@@ -120,7 +122,8 @@ public class DetalleMovieActivity extends AppCompatActivity {
                    date.setText(results.getReleaseDate());
                    idioma.setText(results.getOriginalLanguage());
                    //image = (String) results.getPosterPath();
-
+                   back = results.getBackdropPath();
+                   setImages(back);
 
                }
                @Override
@@ -129,10 +132,14 @@ public class DetalleMovieActivity extends AppCompatActivity {
                }
           });
 
+
+
+
+    }
+    public void setImages(String back){
         String image_peli = getIntent().getStringExtra("imageMovie");
         Glide.with(this).load(url_imagenes+image_peli).into(poster);
-
-
+        Glide.with(this).load(url_imagenes+back).into(poster2);
     }
     @Override
     protected void onDestroy(){

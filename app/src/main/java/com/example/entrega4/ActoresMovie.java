@@ -1,6 +1,8 @@
 package com.example.entrega4;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +20,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAllActores.verTodoslosActores {
-
+    ImageView posterAllActores;
+    TextView tituloAllActores;
     RecyclerAdapterAllActores recyclerAdapterAllActores;
     RecyclerView recyclerViewActores;
     List<MovieResults.ResultsBean> listapeliculas;
@@ -30,7 +33,10 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actores_movie);
+
         recyclerViewActores = findViewById(R.id.recyclerviewActoresMovies);
+        posterAllActores = findViewById(R.id.imagenActorAll);
+        tituloAllActores = findViewById(R.id.titutloAllActores);
         recyclerViewActores.setLayoutManager(new LinearLayoutManager(this));
         recyclerAdapterAllActores = new RecyclerAdapterAllActores(this,new ArrayList<>());
         recyclerViewActores.setAdapter(recyclerAdapterAllActores);
@@ -38,7 +44,8 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
         Bundle extras = new Bundle();
         Integer id =getIntent().getExtras().getInt("idpelicula");
         getCredits(id);
-
+        String titulo = getIntent().getExtras().getString("tituloMovie");
+        tituloAllActores.setText(titulo);
     }
 
 

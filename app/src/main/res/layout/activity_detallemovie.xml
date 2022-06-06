@@ -17,12 +17,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
 
-                tools:srcCompat="@tools:sample/avatars" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/Title"
@@ -43,7 +60,7 @@
                 android:id="@+id/Genre2"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:text="Generos:"
+                android:text="Generos"
                 android:textColor="@color/black"
                 android:textStyle="italic"
                 android:layout_marginLeft="20dp"
@@ -92,7 +109,7 @@
                 android:id="@+id/prod"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:text="Producida por:"
+                android:text="Producida por"
                 android:textColor="@color/black"
                 android:textStyle="italic"
                 android:layout_marginLeft="20dp"
@@ -112,6 +129,17 @@
 
             </TextView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Reparto principal"
+                android:textColor="@color/black"
+                android:textStyle="italic"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp">
+            </TextView>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewActoresMovies"
                 android:layout_width="match_parent"
@@ -155,7 +183,7 @@
                 android:id="@+id/idio"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:text="idioma:"
+                android:text="Idioma Original"
                 android:textStyle="italic"
                 android:textColor="@color/black"
                 android:layout_marginTop="20dp"

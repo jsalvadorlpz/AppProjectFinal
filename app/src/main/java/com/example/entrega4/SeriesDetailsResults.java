@@ -1,161 +1,71 @@
 package com.example.entrega4;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class SeriesDetailsResults {
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("credit_id")
-    @Expose
-    private String creditId;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("gender")
-    @Expose
-    private Integer gender;
-    @SerializedName("profile_path")
-    @Expose
-    private String profilePath;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCreditId() {
-        return creditId;
-    }
-
-    public void setCreditId(String creditId) {
-        this.creditId = creditId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getGender() {
-        return gender;
-    }
-
-    public void setGender(Integer gender) {
-        this.gender = gender;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
-    }
-
-
-
-public class Example {
-
     @SerializedName("backdrop_path")
-    @Expose
     private String backdropPath;
     @SerializedName("created_by")
-    @Expose
-
+    private List<CreatedBy> createdBy = null;
+    @SerializedName("episode_run_time")
     private List<Integer> episodeRunTime = null;
     @SerializedName("first_air_date")
-    @Expose
     private String firstAirDate;
     @SerializedName("genres")
-    @Expose
     private List<Genre> genres = null;
     @SerializedName("homepage")
-    @Expose
     private String homepage;
     @SerializedName("id")
-    @Expose
     private Integer id;
     @SerializedName("in_production")
-    @Expose
     private Boolean inProduction;
     @SerializedName("languages")
-    @Expose
     private List<String> languages = null;
     @SerializedName("last_air_date")
-    @Expose
     private String lastAirDate;
     @SerializedName("last_episode_to_air")
-    @Expose
     private LastEpisodeToAir lastEpisodeToAir;
     @SerializedName("name")
-    @Expose
     private String name;
     @SerializedName("next_episode_to_air")
-    @Expose
     private Object nextEpisodeToAir;
     @SerializedName("networks")
-    @Expose
     private List<Network> networks = null;
     @SerializedName("number_of_episodes")
-    @Expose
     private Integer numberOfEpisodes;
     @SerializedName("number_of_seasons")
-    @Expose
     private Integer numberOfSeasons;
     @SerializedName("origin_country")
-    @Expose
     private List<String> originCountry = null;
     @SerializedName("original_language")
-    @Expose
     private String originalLanguage;
     @SerializedName("original_name")
-    @Expose
     private String originalName;
     @SerializedName("overview")
-    @Expose
     private String overview;
     @SerializedName("popularity")
-    @Expose
     private Double popularity;
     @SerializedName("poster_path")
-    @Expose
     private String posterPath;
     @SerializedName("production_companies")
-    @Expose
     private List<ProductionCompany> productionCompanies = null;
     @SerializedName("production_countries")
-    @Expose
     private List<ProductionCountry> productionCountries = null;
     @SerializedName("seasons")
-    @Expose
     private List<Season> seasons = null;
     @SerializedName("spoken_languages")
-    @Expose
     private List<SpokenLanguage> spokenLanguages = null;
     @SerializedName("status")
-    @Expose
     private String status;
     @SerializedName("tagline")
-    @Expose
     private String tagline;
     @SerializedName("type")
-    @Expose
     private String type;
     @SerializedName("vote_average")
-    @Expose
     private Double voteAverage;
     @SerializedName("vote_count")
-    @Expose
     private Integer voteCount;
 
     public String getBackdropPath() {
@@ -166,7 +76,13 @@ public class Example {
         this.backdropPath = backdropPath;
     }
 
+    public List<CreatedBy> getCreatedBy() {
+        return createdBy;
+    }
 
+    public void setCreatedBy(List<CreatedBy> createdBy) {
+        this.createdBy = createdBy;
+    }
 
     public List<Integer> getEpisodeRunTime() {
         return episodeRunTime;
@@ -400,391 +316,333 @@ public class Example {
         this.voteCount = voteCount;
     }
 
-}
-
-public class Genre {
-
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
-
-    public Integer getId() {
-        return id;
+    public class CreatedBy {
+        @SerializedName("id")
+        private Integer id;
+        @SerializedName("credit_id")
+        private String creditId;
+        @SerializedName("name")
+        private String name;
+        @SerializedName("gender")
+        private Integer gender;
+        @SerializedName("profile_path")
+        private String profilePath;
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+        public String getCreditId() {
+            return creditId;
+        }
+        public void setCreditId(String creditId) {
+            this.creditId = creditId;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public Integer getGender() {
+            return gender;
+        }
+        public void setGender(Integer gender) {
+            this.gender = gender;
+        }
+        public String getProfilePath() {
+            return profilePath;
+        }
+        public void setProfilePath(String profilePath) {
+            this.profilePath = profilePath;
+        }
+    }
+    public class Genre {
+        @SerializedName("id")
+        private Integer id;
+        @SerializedName("name")
+        private String name;
+
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+    public class LastEpisodeToAir {
+        @SerializedName("air_date")
+        private String airDate;
+        @SerializedName("episode_number")
+        private Integer episodeNumber;
+        @SerializedName("id")
+        private Integer id;
+        @SerializedName("name")
+        private String name;
+        @SerializedName("overview")
+        private String overview;
+        @SerializedName("production_code")
+        private String productionCode;
+        @SerializedName("season_number")
+        private Integer seasonNumber;
+        @SerializedName("still_path")
+        private String stillPath;
+        @SerializedName("vote_average")
+        private Double voteAverage;
+        @SerializedName("vote_count")
+        private Integer voteCount;
+        public String getAirDate() {
+            return airDate;
+        }
+        public void setAirDate(String airDate) {
+            this.airDate = airDate;
+        }
+        public Integer getEpisodeNumber() {
+            return episodeNumber;
+        }
+        public void setEpisodeNumber(Integer episodeNumber) {
+            this.episodeNumber = episodeNumber;
+        }
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public String getOverview() {
+            return overview;
+        }
+        public void setOverview(String overview) {
+            this.overview = overview;
+        }
+        public String getProductionCode() {
+            return productionCode;
+        }
+        public void setProductionCode(String productionCode) {
+            this.productionCode = productionCode;
+        }
+        public Integer getSeasonNumber() {
+            return seasonNumber;
+        }
+        public void setSeasonNumber(Integer seasonNumber) {
+            this.seasonNumber = seasonNumber;
+        }
+        public String getStillPath() {
+            return stillPath;
+        }
+        public void setStillPath(String stillPath) {
+            this.stillPath = stillPath;
+        }
+        public Double getVoteAverage() {
+            return voteAverage;
+        }
+        public void setVoteAverage(Double voteAverage) {
+            this.voteAverage = voteAverage;
+        }
+        public Integer getVoteCount() {
+            return voteCount;
+        }
+        public void setVoteCount(Integer voteCount) {
+            this.voteCount = voteCount;
+        }
+    }
+
+    public class Network {
+
+        @SerializedName("name")
+        private String name;
+        @SerializedName("id")
+        private Integer id;
+        @SerializedName("logo_path")
+        private String logoPath;
+        @SerializedName("origin_country")
+        private String originCountry;
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+        public String getLogoPath() {
+            return logoPath;
+        }
+        public void setLogoPath(String logoPath) {
+            this.logoPath = logoPath;
+        }
+        public String getOriginCountry() {
+            return originCountry;
+        }
+        public void setOriginCountry(String originCountry) {
+            this.originCountry = originCountry;
+        }
+    }
+
+    public class ProductionCompany {
+
+        @SerializedName("id")
+        private Integer id;
+        @SerializedName("logo_path")
+        private Object logoPath;
+        @SerializedName("name")
+        private String name;
+        @SerializedName("origin_country")
+        private String originCountry;
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+        public Object getLogoPath() {
+            return logoPath;
+        }
+        public void setLogoPath(Object logoPath) {
+            this.logoPath = logoPath;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public String getOriginCountry() {
+            return originCountry;
+        }
+        public void setOriginCountry(String originCountry) {
+            this.originCountry = originCountry;
+        }
+    }
+
+    public class ProductionCountry {
+
+        @SerializedName("iso_3166_1")
+        private String iso31661;
+        @SerializedName("name")
+        private String name;
+
+        public String getIso31661() {
+            return iso31661;
+        }
+        public void setIso31661(String iso31661) {
+            this.iso31661 = iso31661;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+
+    public class Season {
+
+        @SerializedName("air_date")
+        private String airDate;
+        @SerializedName("episode_count")
+        private Integer episodeCount;
+        @SerializedName("id")
+        private Integer id;
+        @SerializedName("name")
+        private String name;
+        @SerializedName("overview")
+        private String overview;
+        @SerializedName("poster_path")
+        private String posterPath;
+        @SerializedName("season_number")
+        private Integer seasonNumber;
+
+        public String getAirDate() {
+            return airDate;
+        }
+        public void setAirDate(String airDate) {
+            this.airDate = airDate;
+        }
+        public Integer getEpisodeCount() {
+            return episodeCount;
+        }
+        public void setEpisodeCount(Integer episodeCount) {
+            this.episodeCount = episodeCount;
+        }
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public String getOverview() {
+            return overview;
+        }
+        public void setOverview(String overview) {
+            this.overview = overview;
+        }
+        public String getPosterPath() {
+            return posterPath;
+        }
+        public void setPosterPath(String posterPath) {
+            this.posterPath = posterPath;
+        }
+        public Integer getSeasonNumber() {
+            return seasonNumber;
+        }
+        public void setSeasonNumber(Integer seasonNumber) {
+            this.seasonNumber = seasonNumber;
+        }
+    }
+
+    public class SpokenLanguage {
+
+        @SerializedName("english_name")
+        private String englishName;
+        @SerializedName("iso_639_1")
+        private String iso6391;
+        @SerializedName("name")
+        private String name;
+
+        public String getEnglishName() {
+            return englishName;
+        }
+        public void setEnglishName(String englishName) {
+            this.englishName = englishName;
+        }
+        public String getIso6391() {
+            return iso6391;
+        }
+
+        public void setIso6391(String iso6391) {
+            this.iso6391 = iso6391;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
     }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-}
-
-class LastEpisodeToAir {
-
-    @SerializedName("air_date")
-    @Expose
-    private String airDate;
-    @SerializedName("episode_number")
-    @Expose
-    private Integer episodeNumber;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("overview")
-    @Expose
-    private String overview;
-    @SerializedName("production_code")
-    @Expose
-    private String productionCode;
-    @SerializedName("season_number")
-    @Expose
-    private Integer seasonNumber;
-    @SerializedName("still_path")
-    @Expose
-    private String stillPath;
-    @SerializedName("vote_average")
-    @Expose
-    private Double voteAverage;
-    @SerializedName("vote_count")
-    @Expose
-    private Integer voteCount;
-
-    public String getAirDate() {
-        return airDate;
-    }
-
-    public void setAirDate(String airDate) {
-        this.airDate = airDate;
-    }
-
-    public Integer getEpisodeNumber() {
-        return episodeNumber;
-    }
-
-    public void setEpisodeNumber(Integer episodeNumber) {
-        this.episodeNumber = episodeNumber;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getProductionCode() {
-        return productionCode;
-    }
-
-    public void setProductionCode(String productionCode) {
-        this.productionCode = productionCode;
-    }
-
-    public Integer getSeasonNumber() {
-        return seasonNumber;
-    }
-
-    public void setSeasonNumber(Integer seasonNumber) {
-        this.seasonNumber = seasonNumber;
-    }
-
-    public String getStillPath() {
-        return stillPath;
-    }
-
-    public void setStillPath(String stillPath) {
-        this.stillPath = stillPath;
-    }
-
-    public Double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
-    }
-
-}
-
-public class Network {
-
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("logo_path")
-    @Expose
-    private String logoPath;
-    @SerializedName("origin_country")
-    @Expose
-    private String originCountry;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLogoPath() {
-        return logoPath;
-    }
-
-    public void setLogoPath(String logoPath) {
-        this.logoPath = logoPath;
-    }
-
-    public String getOriginCountry() {
-        return originCountry;
-    }
-
-    public void setOriginCountry(String originCountry) {
-        this.originCountry = originCountry;
-    }
-
-}
-
-public class ProductionCompany {
-
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("logo_path")
-    @Expose
-    private Object logoPath;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("origin_country")
-    @Expose
-    private String originCountry;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Object getLogoPath() {
-        return logoPath;
-    }
-
-    public void setLogoPath(Object logoPath) {
-        this.logoPath = logoPath;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOriginCountry() {
-        return originCountry;
-    }
-
-    public void setOriginCountry(String originCountry) {
-        this.originCountry = originCountry;
-    }
-
-}
-
-public class ProductionCountry {
-
-    @SerializedName("iso_3166_1")
-    @Expose
-    private String iso31661;
-    @SerializedName("name")
-    @Expose
-    private String name;
-
-    public String getIso31661() {
-        return iso31661;
-    }
-
-    public void setIso31661(String iso31661) {
-        this.iso31661 = iso31661;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-}
-
-public class Season {
-
-    @SerializedName("air_date")
-    @Expose
-    private String airDate;
-    @SerializedName("episode_count")
-    @Expose
-    private Integer episodeCount;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("overview")
-    @Expose
-    private String overview;
-    @SerializedName("poster_path")
-    @Expose
-    private String posterPath;
-    @SerializedName("season_number")
-    @Expose
-    private Integer seasonNumber;
-
-    public String getAirDate() {
-        return airDate;
-    }
-
-    public void setAirDate(String airDate) {
-        this.airDate = airDate;
-    }
-
-    public Integer getEpisodeCount() {
-        return episodeCount;
-    }
-
-    public void setEpisodeCount(Integer episodeCount) {
-        this.episodeCount = episodeCount;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public Integer getSeasonNumber() {
-        return seasonNumber;
-    }
-
-    public void setSeasonNumber(Integer seasonNumber) {
-        this.seasonNumber = seasonNumber;
-    }
-
-}
-
-public class SpokenLanguage {
-
-    @SerializedName("english_name")
-    @Expose
-    private String englishName;
-    @SerializedName("iso_639_1")
-    @Expose
-    private String iso6391;
-    @SerializedName("name")
-    @Expose
-    private String name;
-
-    public String getEnglishName() {
-        return englishName;
-    }
-
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
-
-    public String getIso6391() {
-        return iso6391;
-    }
-
-    public void setIso6391(String iso6391) {
-        this.iso6391 = iso6391;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-}
 }

@@ -101,7 +101,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.Release.setText(Release);
             viewHolder.Genrer.setText(listaGeneros.get(position));
             viewHolder.popu.setProgress((int) Math.round((pop * 10)));
-            viewHolder.prog.setText(String.valueOf(Math.round((pop * 10) * 100.0) / 100.0) + "%");
+            viewHolder.prog.setText(String.valueOf(Math.round((pop * 10)) + "%"));
         } else {
 
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
