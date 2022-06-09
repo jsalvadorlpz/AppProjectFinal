@@ -1,6 +1,7 @@
 package com.example.entrega4;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.entrega4.Adapter.RecyclerAdapterAllActores;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
     public static String BASE_URL = "https://api.themoviedb.org";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     List<CreditResults.Cast> listaActores;
+    public String url_imagenes = "https://image.tmdb.org/t/p/w500";
 
     TextView volverPrincipal;
 
@@ -46,10 +49,14 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
         listaActores = new ArrayList<CreditResults.Cast>();
         Bundle extras = new Bundle();
         Integer id =getIntent().getExtras().getInt("idpelicula");
+        String tituloPeli =getIntent().getExtras().getString("TituloPelicula");
+        String path = getIntent().getExtras().getString("pathPelicula");
         getCredits(id);
-        String titulo = getIntent().getExtras().getString("tituloMovie");
-        tituloAllActores.setText(titulo);
-
+        tituloAllActores.setText(tituloPeli);
+        Log.e("","El path es :" + path);
+        if(path != null){
+            Glide.with(this).load(url_imagenes+path).into(posterAllActores);
+        }
         volverPrincipal = findViewById(R.id.vovlerPrincipal);
         volverPrincipal.setOnClickListener(new View.OnClickListener() {
             @Override

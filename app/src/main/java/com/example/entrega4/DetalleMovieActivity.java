@@ -33,7 +33,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
     List<CreditResults.Cast> listaActores,lista10Actores;
     RecyclerAdapterActores recyclerAdapterActores;
     Integer idpelicula,id2;
-    String back, post;
+    String back, post,Titulo,titulo2,Path,path2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
         //RECYCLER Y ADAPTER DE ACTORES
         recyclerView = (RecyclerView) findViewById(R.id.recyclerviewActoresMovies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>(),id2);
+        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>(),id2,titulo2,path2);
         recyclerView.setAdapter(recyclerAdapterActores);
         listaActores = new ArrayList<CreditResults.Cast>();
         lista10Actores = new ArrayList<CreditResults.Cast>();
@@ -59,6 +59,11 @@ public class DetalleMovieActivity extends AppCompatActivity {
         idioma = findViewById(R.id.idioma);
 
         Integer id =Integer.parseInt(getIntent().getStringExtra("idMovie"));
+        String tituloMovie =getIntent().getStringExtra("tituloMovie");
+        String pathMovie =getIntent().getStringExtra("imageMovie");
+        Log.e("","El titulo recibido es "+tituloMovie);
+        Intent detalle = new Intent(this, DetalleMovieActivity.class);
+        detalle.putExtra("tituloPeli",tituloMovie);
         idpelicula = id;
         id2 = id;
         Intent actores  = new Intent(this,ActoresMovie.class);
@@ -124,6 +129,9 @@ public class DetalleMovieActivity extends AppCompatActivity {
                    //image = (String) results.getPosterPath();
                    back = results.getBackdropPath();
                    setImages(back);
+                   Titulo = results.getTitle();
+                   Path = results.getBackdropPath();
+                   Log.e("","El back drop path es" + Path);
 
                }
                @Override
@@ -167,7 +175,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
                     lista10Actores.add(listaActores.get(iterador));
                     iterador++;
                 }
-                recyclerAdapterActores.updateDataActores(lista10Actores,id2);
+                recyclerAdapterActores.updateDataActores(lista10Actores,id2,Titulo,Path);
             }
             @Override
             public void onFailure(Call<CreditResults> call, Throwable t) {

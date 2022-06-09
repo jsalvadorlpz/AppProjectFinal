@@ -166,9 +166,10 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
             public void onClick(View view) {
                 Intent detalle = new Intent(getContext(), DetalleMovieActivity.class);
                 Intent actores = new Intent(getContext(), ActoresMovie.class);
-                actores.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
+                actores.putExtra("MovieTitle",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getTitle()));
                 detalle.putExtra("idMovie",String.valueOf(listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getId()));
                 detalle.putExtra("imageMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getPoster_path());
+                detalle.putExtra("tituloMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getTitle());
                 //detalle.putExtra("tituloMovie",listapeliculas.get(recyclerView.getChildAdapterPosition(view)).getTitle());
                 startActivity(detalle);
 

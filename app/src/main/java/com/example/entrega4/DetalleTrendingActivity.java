@@ -38,6 +38,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
     List<CreditResults.Cast> listaActores,lista10Actores;
     RecyclerAdapterActores recyclerAdapterActores;
     Integer idpelicula,id2;
+    String Titulo,titulo2,Path,path2;
 
 
     @Override
@@ -48,7 +49,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
         //RECYCLER Y ADAPTER DE ACTORES
         recyclerView = (RecyclerView) findViewById(R.id.recyclerviewActoresTrending);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>(),id2);
+        recyclerAdapterActores = new RecyclerAdapterActores(this,new ArrayList<>(),id2,titulo2,path2);
         recyclerView.setAdapter(recyclerAdapterActores);
         listaActores = new ArrayList<CreditResults.Cast>();
         lista10Actores = new ArrayList<CreditResults.Cast>();
@@ -123,7 +124,8 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                 sinopsis.setText(results.getOverview());
                 date.setText(results.getReleaseDate());
                 idioma.setText(results.getOriginalLanguage());
-
+                Titulo = results.getTitle();
+                Path = results.getBackdropPath();
             }
             @Override
             public void onFailure(Call<MovieDetailsResults> call, Throwable t) {
@@ -155,7 +157,7 @@ public class DetalleTrendingActivity extends AppCompatActivity {
                     lista10Actores.add(listaActores.get(iterador));
                     iterador++;
                 }
-                recyclerAdapterActores.updateDataActores(lista10Actores,id2);
+                recyclerAdapterActores.updateDataActores(lista10Actores,id2,Titulo,Path);
             }
             @Override
             public void onFailure(Call<CreditResults> call, Throwable t) {

@@ -27,18 +27,23 @@ public class RecyclerAdapterActores extends RecyclerView.Adapter<RecyclerView.Vi
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
     Context context;
     Integer id;
+    String titulo,path;
 
    //constructor
-   public RecyclerAdapterActores(Context context, List<CreditResults.Cast> listaActores, Integer id){
+   public RecyclerAdapterActores(Context context, List<CreditResults.Cast> listaActores, Integer id,String titulo,String path){
        this.inflater = LayoutInflater.from(context);
        this.listaActores = listaActores;
        this.context = context;
        this.id = id;
+       this.titulo = titulo;
+       this.path = path;
    }
-    public void updateDataActores(List<CreditResults.Cast> newitems,Integer id) {
+    public void updateDataActores(List<CreditResults.Cast> newitems,Integer id,String titulo,String path) {
         listaActores.clear();
         listaActores.addAll(newitems);
         this.id = id;
+        this.titulo = titulo;
+        this.path = path;
         notifyDataSetChanged();
     }
 
@@ -75,6 +80,8 @@ public class RecyclerAdapterActores extends RecyclerView.Adapter<RecyclerView.Vi
 
                     Intent verTodoslosActores = new Intent(context, ActoresMovie.class);
                     verTodoslosActores.putExtra("idpelicula",id);
+                    verTodoslosActores.putExtra("TituloPelicula",titulo);
+                    verTodoslosActores.putExtra("pathPelicula",path);
                     context.startActivity(verTodoslosActores);
                 }
             });
