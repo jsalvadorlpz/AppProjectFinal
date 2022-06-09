@@ -97,7 +97,7 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHold
             viewHolder.Release.setText(release);
             viewHolder.Genrer.setText(listaGeneros.get(position));
             viewHolder.popu.setProgress((int) Math.round((pop / 60)));
-            viewHolder.prog.setText(String.valueOf(Math.round((pop / 60) * 100.0) / 100.0) + "%");
+            viewHolder.prog.setText(String.valueOf(Math.round((pop / 60)) + "%"));
         }else{
             FooterViewHolder2 footerViewHolder2 = (FooterViewHolder2) holder;
             footerViewHolder2.cargaMas.setOnClickListener(new View.OnClickListener() {

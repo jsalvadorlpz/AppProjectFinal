@@ -1,6 +1,8 @@
 package com.example.entrega4;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +25,8 @@ public class actores_tv extends AppCompatActivity implements RecyclerAdapterAllA
     public static String BASE_URL = "https://api.themoviedb.org";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     List<CreditResultTv.Cast> listaActores;
+
+    TextView volverPrincipal;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actores_tv);
@@ -34,6 +38,14 @@ public class actores_tv extends AppCompatActivity implements RecyclerAdapterAllA
         Bundle extras = new Bundle();
         Integer id =getIntent().getExtras().getInt("idpelicula");
         getCredits(id);
+
+        volverPrincipal = findViewById(R.id.vovlerPrincipalTv);
+        volverPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
     }
 

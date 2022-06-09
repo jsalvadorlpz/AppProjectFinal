@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.entrega4.ActoresMovie;
 import com.example.entrega4.CreditResultTv;
 import com.example.entrega4.R;
+import com.example.entrega4.actores_tv;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class RecyclerAdapterActoresTv extends RecyclerView.Adapter<RecyclerView.
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "clicado el carga mas actores",Toast.LENGTH_SHORT).show();
 
-                    Intent verTodoslosActores = new Intent(context, ActoresMovie.class);
+                    Intent verTodoslosActores = new Intent(context, actores_tv.class);
                     verTodoslosActores.putExtra("idpelicula",id);
                     context.startActivity(verTodoslosActores);
                 }

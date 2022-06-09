@@ -1,6 +1,7 @@
 package com.example.entrega4;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
     List<CreditResults.Cast> listaActores;
 
+    TextView volverPrincipal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,16 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
         getCredits(id);
         String titulo = getIntent().getExtras().getString("tituloMovie");
         tituloAllActores.setText(titulo);
+
+        volverPrincipal = findViewById(R.id.vovlerPrincipal);
+        volverPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+
     }
 
 

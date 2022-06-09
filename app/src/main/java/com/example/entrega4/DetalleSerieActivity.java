@@ -80,17 +80,10 @@ public class DetalleSerieActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SeriesDetailsResults> call, Response<SeriesDetailsResults> response) {
                 SeriesDetailsResults results = response.body();
-
                 titulo.setText(results.getName()+ "(" +results.getOriginalName()+ ")");
-
-                //List<SeriesDetailsResults.Genre>  generos = ;
-               // genre.setText();
-                //company.setText(CompnayName);
-                //titulo.setText(results.getName() "("+ results.getName()+")");
                 sinopsis.setText(results.getOverview());
                 date.setText(results.getFirstAirDate());
                 idioma.setText(results.getOriginalLanguage());
-                //image = (String) results.getPosterPath();
                 back = results.getBackdropPath();
                 image = results.getPosterPath();
                 setImage(back,image);

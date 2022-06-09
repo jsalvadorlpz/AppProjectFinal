@@ -21,9 +21,9 @@
             android:layout_height="25dp"
             android:clickable="true"
             android:textStyle="bold"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:gravity="center"
-            android:text="Ver más ->"/>
+            android:text="Ver más"/>
 
 
 
