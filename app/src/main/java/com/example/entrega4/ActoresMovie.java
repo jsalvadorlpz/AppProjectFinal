@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.entrega4.Adapter.RecyclerAdapterAllActores;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class ActoresMovie extends AppCompatActivity implements RecyclerAdapterAl
         tituloAllActores.setText(tituloPeli);
         Log.e("","El path es :" + path);
         if(path != null){
-            Glide.with(this).load(url_imagenes+path).into(posterAllActores);
+            //Glide.with(this).load(url_imagenes+path).into(posterAllActores);
         }
         volverPrincipal = findViewById(R.id.vovlerPrincipal);
         volverPrincipal.setOnClickListener(new View.OnClickListener() {

@@ -65,4 +65,13 @@ public interface TheMovieDatasetApi {
             @Path("tv_id") Integer tvId,
             @Query("api_key") String apikey
     );
+    @GET("/3/movie/{category}")
+    Call<UpComingsDetails> listOfUpcomings(
+            @Path("category") String category,
+            @Query("api_key") String apikey,
+            @Query("language") String language,
+            @Query("page") int page
+
+
+    );
 }

@@ -16,6 +16,7 @@ import com.example.entrega4.Fragments.MainFragment;
 import com.example.entrega4.Fragments.SeriesFragment;
 import com.example.entrega4.Fragments.TrendingFragment;
 
+import com.example.entrega4.Fragments.UpComings;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -71,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container,new SeriesFragment());
+            fragmentTransaction.commit();
+
+        }
+        if(menuItem.getItemId() == R.id.UpComings){
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container,new UpComings());
             fragmentTransaction.commit();
 
         }
