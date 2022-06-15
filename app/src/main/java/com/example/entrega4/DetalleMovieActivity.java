@@ -1,13 +1,17 @@
 package com.example.entrega4;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +29,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetalleMovieActivity extends AppCompatActivity {
     TextView titulo,genre,date,sinopsis,language,company,idioma;
-    ImageView poster,poster2;
+    ImageView poster,poster2,imagen;
+    private LinearLayout layout;
     public String url_imagenes = "https://image.tmdb.org/t/p/w500";
     public static String BASE_URL = "https://api.themoviedb.org";
     public String API_KEY = "65b0f0c1dca6b0957d34d1fceaf3107a";
@@ -57,8 +62,15 @@ public class DetalleMovieActivity extends AppCompatActivity {
         poster2 = findViewById(R.id.imageViewBack);
         company = findViewById(R.id.prod_compa);
         idioma = findViewById(R.id.idioma);
+        layout = findViewById(R.id.layoutDetalleMovie);
+        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.id.imageView);
+        //crearPalette(bitmap);
+        paletteGenerator();
+
+
 
         Integer id =Integer.parseInt(getIntent().getStringExtra("idMovie"));
+
         String tituloMovie =getIntent().getStringExtra("tituloMovie");
         String pathMovie =getIntent().getStringExtra("imageMovie");
         Log.e("","El titulo recibido es "+tituloMovie);
@@ -72,6 +84,7 @@ public class DetalleMovieActivity extends AppCompatActivity {
 
 
         //actores.putExtra(extras);
+        getRecomendados(id);
         getCredits(id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -144,6 +157,25 @@ public class DetalleMovieActivity extends AppCompatActivity {
 
 
     }
+    //obtener el palette con los colores el bitmap
+    public Palette createPaletteSync(Bitmap bitmap){
+        Palette palette = Palette.from(bitmap).generate();
+        return palette;
+
+    }
+    public void paletteGenerator(){
+        imagen = findViewById(R.id.imageView);
+        BitmapDrawable drawable = (BitmapDrawable) imagen.getDrawable();
+        if(drawable  != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            Palette palette = createPaletteSync(bitmap);
+            Palette.Swatch dominatswatch = palette.getDominantSwatch();
+            if (dominatswatch != null) {
+                int bgColor = dominatswatch.getRgb();
+                layout.setBackgroundColor(bgColor);
+            }
+        }
+    }
     public void setImages(String back){
         String image_peli = getIntent().getStringExtra("imageMovie");
         Glide.with(this).load(url_imagenes+image_peli).into(poster);
@@ -184,6 +216,26 @@ public class DetalleMovieActivity extends AppCompatActivity {
         });
 
     }
+    public void getRecomendados(Integer id){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TheMovieDatasetApi myInterface2 = retrofit.create(TheMovieDatasetApi.class);
 
+        Call<RecomedadosResults> call = myInterface2.listOfRecomendados(id,API_KEY);
+
+        call.enqueue(new Callback<RecomedadosResults>() {
+            @Override
+            public void onResponse(Call<RecomedadosResults> call, Response<RecomedadosResults> response) {
+                Log.e("","Recomendados entra en el OnResponse");
+            }
+            @Override
+            public void onFailure(Call<RecomedadosResults> call, Throwable t) {
+                Log.e("","Recomendados entra en el onFailure");
+
+            }
+        });
+    }
 
 }

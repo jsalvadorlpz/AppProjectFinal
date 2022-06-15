@@ -49,11 +49,6 @@ public interface TheMovieDatasetApi {
             @Query("api_key") String apiKey
     );
 
-    @GET("/3/person/{person_id}")
-    Call<PeopleResults> listOfPeople(
-            @Path("person_id") Integer personId,
-            @Query("api_key") String apikey
-    );
 
     @GET("/3/movie/{movie_id}/credits")
     Call<CreditResults> listOfCredit(
@@ -65,13 +60,16 @@ public interface TheMovieDatasetApi {
             @Path("tv_id") Integer tvId,
             @Query("api_key") String apikey
     );
-    @GET("/3/movie/{category}")
+    @GET("/3/movie/upcoming")
     Call<UpComingsDetails> listOfUpcomings(
-            @Path("category") String category,
             @Query("api_key") String apikey,
-            @Query("language") String language,
             @Query("page") int page
 
 
+    );
+    @GET("/3/movie/{movie_id}/similar")
+    Call<RecomedadosResults> listOfRecomendados(
+            @Path("movie_id") Integer movieId,
+            @Query("api_key") String apikey
     );
 }

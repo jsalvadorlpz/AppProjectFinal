@@ -94,7 +94,6 @@ public class MainFragment extends Fragment implements RecyclerAdapter.botonCarga
                 Log.e("","Recibimos la lista de peliculas con tamaño: " + String.valueOf(peliculas.size()));
                 getGenres();
 
-
             }
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {

@@ -82,22 +82,21 @@ public class UpComings extends Fragment implements RecyclerAdapter.botonCargarMa
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-        Call<UpComingsDetails> callUpcoming = myInterface.listOfUpcomings(CATEGORY,API_KEY,LANGUAGE,PAGE);
+        Call<UpComingsDetails> callMovies = myInterface.listOfUpcomings(API_KEY,PAGE);
         Log.e("","crea la call");
-        callUpcoming.enqueue(new Callback<UpComingsDetails>() {
+        callMovies.enqueue(new Callback<UpComingsDetails>() {
             @Override
             public void onResponse(Call<UpComingsDetails> call, Response<UpComingsDetails> response) {
-
+                Log.e("","entra en el OnResponse");
                 UpComingsDetails results = response.body();
-                List<UpComingsDetails.Result> listOfUpcomings = results.getResults();
-                upcomings = listOfUpcomings;
-                cantidadMovies = listOfUpcomings.size();
+                List<UpComingsDetails.Result> listOfMovies = results.getResults();
+                upcomings = listOfMovies;
+                cantidadMovies = listOfMovies.size();
                 Log.e("","Recibimos la lista de peliculas con tamaño: " + String.valueOf(upcomings.size()));
                 getGenres();
 
 
-            }
-            @Override
+            } @Override
             public void onFailure(Call<UpComingsDetails> call, Throwable t) {
                 Log.e("","entra fallo");
             }
@@ -224,7 +223,7 @@ public class UpComings extends Fragment implements RecyclerAdapter.botonCargarMa
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TheMovieDatasetApi myInterface = retrofit.create(TheMovieDatasetApi.class);
-        Call<UpComingsDetails> callMovies = myInterface.listOfUpcomings(CATEGORY,API_KEY,LANGUAGE,page);
+        Call<UpComingsDetails> callMovies = myInterface.listOfUpcomings(API_KEY,page);
         Log.e("","crea la call");
         callMovies.enqueue(new Callback<UpComingsDetails>() {
             @Override
